@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>spaghettisauce123 | Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+        
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        .mono {
+            font-family: 'Space Mono', monospace;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .audio-progress {
+            height: 2px;
+            background: #222;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .audio-progress-fill {
+            height: 100%;
+            background: #fff;
+            width: 0%;
+        }
+
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 60;
+            background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(255,255,255,0.02) 50%, rgba(0,0,0,0) 100%);
+            opacity: 0.1;
+            position: fixed;
+            pointer-events: none;
+            animation: scan 8s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: -100px; }
+            100% { top: 100%; }
+        }
+
+        .page-transition {
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .hidden-page {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .active-page {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Filter pill styling */
+        .filter-btn.active {
+            background: white;
+            color: black;
+            border-color: white;
+        }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #222; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
+    </style>
+</head>
+<body class="selection:bg-white selection:text-black">
+    <div class="scanline"></div>
+
+    <!-- Minimal Header / Nav -->
+    <nav class="fixed top-0 w-full z-50 border-b border-white/5 bg-black/90 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-8 h-24 flex items-center justify-between">
+            <div class="flex flex-col cursor-pointer" onclick="showPage('home')">
+                <span class="text-lg font-bold tracking-tighter mono uppercase italic">spaghettisauce123</span>
+                <span class="text-[9px] mono uppercase tracking-[0.4em] text-white/40 mt-1">DJ/Producer and Digital Creator</span>
+            </div>
+            <div class="hidden md:flex gap-12 text-[10px] mono uppercase tracking-[0.2em] text-white/40">
+                <button onclick="showPage('audio')" class="nav-link hover:text-white transition-colors">Audio_Archive</button>
+                <button onclick="showPage('home')" class="nav-link hover:text-white transition-colors">About</button>
+                <button onclick="showPage('home')" class="nav-link hover:text-white transition-colors">Connect</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="pt-24">
+        
+        <!-- HOME PAGE -->
+        <div id="page-home" class="page-transition hidden-page">
+            <!-- Hero Line & Entry Button -->
+            <section class="min-h-[50vh] flex flex-col justify-center px-8 max-w-7xl mx-auto">
+                <div class="w-full h-px bg-gradient-to-r from-white/20 to-transparent mb-12"></div>
+                <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+                    <div>
+                        <span class="mono text-[10px] text-white/30 uppercase tracking-[0.5em]">Inventory</span>
+                        <h2 class="text-4xl font-bold mt-2 mono italic tracking-tighter uppercase">Music_Library</h2>
+                    </div>
+                    <button onclick="showPage('audio')" class="group flex items-center gap-6 border border-white/20 px-12 py-8 hover:bg-white hover:text-black transition-all duration-300">
+                        <span class="mono text-[13px] font-bold tracking-[0.4em] uppercase">Enter_Audio_Archive</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-2 transition-transform"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Profile & Social -->
+            <section id="about" class="py-32 px-8 border-t border-white/5">
+                <div class="max-w-7xl mx-auto grid lg:grid-cols-12 gap-24">
+                    <div class="lg:col-span-5">
+                        <h3 class="text-2xl font-bold mt-2 mb-12 mono italic tracking-tighter uppercase">Profile_Data</h3>
+                        <div class="grid grid-cols-2 gap-4 text-[10px] mono text-white/30 uppercase">
+                            <div class="border-l border-white/10 pl-4 py-2">
+                                <p class="text-white mb-1">Tools</p>
+                                <p>Fruity Loops Studio Expert</p>
+                            </div>
+                            <div class="border-l border-white/10 pl-4 py-2">
+                                <p class="text-white mb-1">Focus</p>
+                                <p>Electronic Dance Music / HipHop & R&B</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-7">
+                        <div id="connect">
+                            <span class="mono text-[10px] text-white/30 uppercase tracking-[0.5em]">Section_Connect</span>
+                            <h3 class="text-2xl font-bold mt-2 mb-12 mono italic tracking-tighter uppercase">Social_Nodes</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <a href="#" class="glass-card flex items-center justify-between p-6 group">
+                                    <span class="mono text-[10px] tracking-widest uppercase">Instagram</span>
+                                    <i data-lucide="arrow-up-right" class="w-3 h-3 text-white/20 group-hover:text-white transition-colors"></i>
+                                </a>
+                                <a href="#" class="glass-card flex items-center justify-between p-6 group">
+                                    <span class="mono text-[10px] tracking-widest uppercase">Soundcloud</span>
+                                    <i data-lucide="arrow-up-right" class="w-3 h-3 text-white/20 group-hover:text-white transition-colors"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- AUDIO ARCHIVE PAGE -->
+        <div id="page-audio" class="page-transition active-page">
+            <section class="py-20 px-8 max-w-7xl mx-auto min-h-screen">
+                <!-- Archive Header -->
+                <header class="mb-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
+                    <div class="max-w-2xl">
+                        <div class="flex items-center gap-4 mb-4">
+                            <button onclick="showPage('home')" class="mono text-[10px] text-white/40 hover:text-white flex items-center gap-2">
+                                <i data-lucide="chevron-left" class="w-3 h-3"></i> Return_Home
+                            </button>
+                            <span class="w-1 h-1 bg-white/20 rounded-full"></span>
+                            <span class="mono text-[10px] text-white/30 uppercase tracking-[0.5em]">Directory: /Root/Audio</span>
+                        </div>
+                        <h2 class="text-6xl font-bold mono italic tracking-tighter uppercase leading-none">The Audio <br/>Archive.</h2>
+                    </div>
+                    
+                    <!-- Genre Filters -->
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="filterTracks('all')" class="filter-btn active px-4 py-2 border border-white/10 mono text-[10px] uppercase tracking-widest transition-all">All_Files</button>
+                        <button onclick="filterTracks('psytrance')" class="filter-btn px-4 py-2 border border-white/10 mono text-[10px] uppercase tracking-widest transition-all">Psytrance</button>
+                        <button onclick="filterTracks('hiphop')" class="filter-btn px-4 py-2 border border-white/10 mono text-[10px] uppercase tracking-widest transition-all">HipHop_Beats</button>
+                        <button onclick="filterTracks('rnb')" class="filter-btn px-4 py-2 border border-white/10 mono text-[10px] uppercase tracking-widest transition-all">R&B_Vibes</button>
+                    </div>
+                </header>
+
+                <!-- Audio List -->
+                <div id="track-container" class="space-y-px border-t border-white/5">
+                    
+                    <!-- PSYTRANCE TRACK -->
+                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-10 px-6" data-category="psytrance">
+                        <div class="flex flex-col md:flex-row items-center gap-12">
+                            <div class="flex items-center gap-8 shrink-0">
+                                <span class="mono text-[10px] text-white/10 italic">#PSY-01</span>
+                                <button class="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                                    <i data-lucide="play" class="w-5 h-5 ml-1"></i>
+                                </button>
+                            </div>
+                            <div class="flex-grow w-full">
+                                <div class="flex justify-between items-center mb-4">
+                                    <div>
+                                        <div class="flex items-center gap-3 mb-1">
+                                            <span class="bg-indigo-500/10 text-indigo-400 text-[8px] mono px-2 py-0.5 border border-indigo-500/20 uppercase tracking-widest">Psytrance</span>
+                                            <h4 class="text-lg font-bold mono tracking-widest uppercase">NEURAL_DYNAMICS_V2</h4>
+                                        </div>
+                                        <p class="mono text-[9px] text-white/30 uppercase tracking-widest">145 BPM // ACID_RESONANCE</p>
+                                    </div>
+                                    <p class="mono text-xs text-white/40 tracking-widest hidden md:block">07:42</p>
+                                </div>
+                                <div class="audio-progress w-full opacity-20 group-hover:opacity-100 transition-opacity">
+                                    <div class="audio-progress-fill"></div>
+                                </div>
+                            </div>
+                            <div class="flex gap-6 shrink-0 opacity-0 group-hover:opacity-100 transition-all">
+                                <button title="Source File" class="text-white/40 hover:text-white"><i data-lucide="download" class="w-4 h-4"></i></button>
+                                <button title="Details" class="text-white/40 hover:text-white"><i data-lucide="info" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HIPHOP TRACK -->
+                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-10 px-6" data-category="hiphop">
+                        <div class="flex flex-col md:flex-row items-center gap-12">
+                            <div class="flex items-center gap-8 shrink-0">
+                                <span class="mono text-[10px] text-white/10 italic">#BEAT-01</span>
+                                <button class="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                                    <i data-lucide="play" class="w-5 h-5 ml-1"></i>
+                                </button>
+                            </div>
+                            <div class="flex-grow w-full">
+                                <div class="flex justify-between items-center mb-4">
+                                    <div>
+                                        <div class="flex items-center gap-3 mb-1">
+                                            <span class="bg-amber-500/10 text-amber-400 text-[8px] mono px-2 py-0.5 border border-amber-500/20 uppercase tracking-widest">HipHop</span>
+                                            <h4 class="text-lg font-bold mono tracking-widest uppercase">CONCRETE_DREAMS_BOOM</h4>
+                                        </div>
+                                        <p class="mono text-[9px] text-white/30 uppercase tracking-widest">92 BPM // LOFI_SAMPLES</p>
+                                    </div>
+                                    <p class="mono text-xs text-white/40 tracking-widest hidden md:block">03:15</p>
+                                </div>
+                                <div class="audio-progress w-full opacity-20 group-hover:opacity-100 transition-opacity">
+                                    <div class="audio-progress-fill"></div>
+                                </div>
+                            </div>
+                            <div class="flex gap-6 shrink-0 opacity-0 group-hover:opacity-100 transition-all">
+                                <button title="Source File" class="text-white/40 hover:text-white"><i data-lucide="download" class="w-4 h-4"></i></button>
+                                <button title="Details" class="text-white/40 hover:text-white"><i data-lucide="info" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RNB TRACK -->
+                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-10 px-6" data-category="rnb">
+                        <div class="flex flex-col md:flex-row items-center gap-12">
+                            <div class="flex items-center gap-8 shrink-0">
+                                <span class="mono text-[10px] text-white/10 italic">#VIBE-01</span>
+                                <button class="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                                    <i data-lucide="play" class="w-5 h-5 ml-1"></i>
+                                </button>
+                            </div>
+                            <div class="flex-grow w-full">
+                                <div class="flex justify-between items-center mb-4">
+                                    <div>
+                                        <div class="flex items-center gap-3 mb-1">
+                                            <span class="bg-rose-500/10 text-rose-400 text-[8px] mono px-2 py-0.5 border border-rose-500/20 uppercase tracking-widest">R&B</span>
+                                            <h4 class="text-lg font-bold mono tracking-widest uppercase">VELVET_Frequencies</h4>
+                                        </div>
+                                        <p class="mono text-[9px] text-white/30 uppercase tracking-widest">78 BPM // NEO_SOUL_SYNTHS</p>
+                                    </div>
+                                    <p class="mono text-xs text-white/40 tracking-widest hidden md:block">04:10</p>
+                                </div>
+                                <div class="audio-progress w-full opacity-20 group-hover:opacity-100 transition-opacity">
+                                    <div class="audio-progress-fill"></div>
+                                </div>
+                            </div>
+                            <div class="flex gap-6 shrink-0 opacity-0 group-hover:opacity-100 transition-all">
+                                <button title="Source File" class="text-white/40 hover:text-white"><i data-lucide="download" class="w-4 h-4"></i></button>
+                                <button title="Details" class="text-white/40 hover:text-white"><i data-lucide="info" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ANOTHER PSYTRANCE TRACK -->
+                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-10 px-6" data-category="psytrance">
+                        <div class="flex flex-col md:flex-row items-center gap-12">
+                            <div class="flex items-center gap-8 shrink-0">
+                                <span class="mono text-[10px] text-white/10 italic">#PSY-02</span>
+                                <button class="w-16 h-16 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                                    <i data-lucide="play" class="w-5 h-5 ml-1"></i>
+                                </button>
+                            </div>
+                            <div class="flex-grow w-full">
+                                <div class="flex justify-between items-center mb-4">
+                                    <div>
+                                        <div class="flex items-center gap-3 mb-1">
+                                            <span class="bg-indigo-500/10 text-indigo-400 text-[8px] mono px-2 py-0.5 border border-indigo-500/20 uppercase tracking-widest">Psytrance</span>
+                                            <h4 class="text-lg font-bold mono tracking-widest uppercase">FRACTAL_DESCENT</h4>
+                                        </div>
+                                        <p class="mono text-[9px] text-white/30 uppercase tracking-widest">148 BPM // FOREST_DARK</p>
+                                    </div>
+                                    <p class="mono text-xs text-white/40 tracking-widest hidden md:block">08:20</p>
+                                </div>
+                                <div class="audio-progress w-full opacity-20 group-hover:opacity-100 transition-opacity">
+                                    <div class="audio-progress-fill"></div>
+                                </div>
+                            </div>
+                            <div class="flex gap-6 shrink-0 opacity-0 group-hover:opacity-100 transition-all">
+                                <button title="Source File" class="text-white/40 hover:text-white"><i data-lucide="download" class="w-4 h-4"></i></button>
+                                <button title="Details" class="text-white/40 hover:text-white"><i data-lucide="info" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="mt-32 p-12 border border-white/5 bg-zinc-950/30 text-center">
+                    <p class="mono text-[10px] text-white/20 uppercase tracking-[0.5em] mb-4 italic">End_of_Archive</p>
+                    <p class="text-white/40 text-sm mono">Selective uploading in progress.</p>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-16 px-8 border-t border-white/5">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <span class="mono text-[9px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v3.0</span>
+            <div class="flex gap-8 text-white/20">
+                <a href="#" class="hover:text-white transition-colors"><i data-lucide="mail" class="w-4 h-4"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i data-lucide="github" class="w-4 h-4"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Page Routing Logic
+        function showPage(pageId) {
+            const pages = ['home', 'audio'];
+            pages.forEach(p => {
+                const pageEl = document.getElementById(`page-${p}`);
+                if (p === pageId) {
+                    pageEl.classList.remove('hidden-page');
+                    pageEl.classList.add('active-page');
+                } else {
+                    pageEl.classList.add('hidden-page');
+                    pageEl.classList.remove('active-page');
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Filtering Logic
+        function filterTracks(category) {
+            // Update button states
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText.toLowerCase().includes(category.toLowerCase())) {
+                    btn.classList.add('active');
+                }
+                if (category === 'all' && btn.innerText.toLowerCase().includes('all')) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Filter items
+            const items = document.querySelectorAll('.track-item');
+            items.forEach(item => {
+                if (category === 'all' || item.getAttribute('data-category') === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
