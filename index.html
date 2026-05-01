@@ -302,7 +302,7 @@
                                         <h4 class="track-title text-sm font-bold mono tracking-widest uppercase truncate">smartfella</h4>
                                         <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter">
                                             <span class="text-pink-400">#GarageHouse</span>
-                                            <span>130 BPM</span>
+                                            <span>132 BPM</span>
                                         </div>
                                     </div>
                                     <span class="time-display mono text-[10px] text-white/20 shrink-0">00:00</span>
@@ -587,10 +587,10 @@
             });
             
             if (category === 'newest') {
-                sortTracksByDate();
+                sortTracksRandomly();
                 document.querySelectorAll('.track-item').forEach(i => {
                     const cat = i.dataset.category;
-                    i.style.display = (cat === 'psytrance' || cat === 'deephouse' || cat === 'garage' || cat === 'hiphop') ? 'block' : 'none';
+                    i.style.display = (cat === 'psytrance' || cat === 'deephouse' || cat === 'garage' || cat === 'hiphop' || cat === 'riddim') ? 'block' : 'none';
                 });
             } else {
                 if (category === 'psytrance') {
@@ -602,34 +602,19 @@
             }
         }
 
-        function sortTracksByDate() {
+        /**
+         * Shuffles the tracks in the container to provide a randomized experience
+         * for the "Newest" category.
+         */
+        function sortTracksRandomly() {
             const container = document.getElementById('track-container');
             const tracks = Array.from(container.getElementsByClassName('track-item'));
             
-            tracks.sort((a, b) => {
-                const fileA = a.dataset.filename;
-                const fileB = b.dataset.filename;
-                
-                // Priority order
-                const priority = [
-                    'littyabopenheimer(remix)feat-halpa.mp3',
-                    'reverse.mp3', 
-                    'dracula.mp3', 
-                    '123.mp3',
-                    'smartfella.mp3'
-                ];
-                
-                const indexA = priority.indexOf(fileA);
-                const indexB = priority.indexOf(fileB);
-
-                if (indexA !== -1 && indexB !== -1) return indexA - indexB;
-                if (indexA !== -1) return -1;
-                if (indexB !== -1) return 1;
-
-                const titleA = a.querySelector('.track-title').innerText.toLowerCase();
-                const titleB = b.querySelector('.track-title').innerText.toLowerCase();
-                return titleA.localeCompare(titleB);
-            });
+            // Fisher-Yates Shuffle Algorithm
+            for (let i = tracks.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
+            }
             
             tracks.forEach(track => container.appendChild(track));
         }
@@ -657,7 +642,7 @@
         }
 
         window.onload = () => {
-            sortTracksByDate();
+            sortTracksRandomly();
         };
     </script>
 </body>
