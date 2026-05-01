@@ -268,11 +268,12 @@
 
     <footer class="py-12 px-6 border-t border-white/5">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v5.8</span>
+            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v6.0</span>
         </div>
     </footer>
 
-    <audio id="global-player" preload="auto"></audio>
+    <!-- Audio element with crossOrigin for potential CDN issues -->
+    <audio id="global-player" preload="auto" crossorigin="anonymous"></audio>
 
     <script>
         lucide.createIcons();
@@ -287,15 +288,19 @@
             console.log(`[${time}] ${msg}`);
         }
 
-        function toggleTrack(btn, file) {
+        async function toggleTrack(btn, file) {
             const trackItem = btn.closest('.track-item');
             trackItem.classList.remove('is-error');
 
             // Handle pause/play for current track
             if (currentBtn === btn) {
                 if (player.paused) {
-                    player.play().catch(e => log(`Resume Fail: ${e.message}`));
-                    trackItem.classList.add('is-playing');
+                    try {
+                        await player.play();
+                        trackItem.classList.add('is-playing');
+                    } catch (e) {
+                        log(`Resume Blocked: ${e.message}`);
+                    }
                 } else {
                     player.pause();
                     trackItem.classList.remove('is-playing');
@@ -309,27 +314,37 @@
             }
 
             currentBtn = btn;
-            log(`Loading: ./${file}`);
+            log(`Fetching: ./${file}`);
             
-            // Clean state reset
+            // Step 1: Stop and clear existing buffer
             player.pause();
-            player.src = file;
+            player.src = "";
             player.load();
             
-            // Event listener for reliable play on GitHub Pages
-            player.oncanplaythrough = () => {
-                player.play()
-                    .then(() => {
-                        log(`Streaming OK: ${file}`);
+            // Step 2: Set new source
+            player.src = file;
+            
+            // Step 3: Use manual trigger for GitHub Pages delivery
+            try {
+                // Force-fetch the file metadata first
+                await player.load();
+                
+                // We use a small delay to ensure the browser has a valid stream point
+                // some browsers report 'canplay' before they actually have audio data
+                player.oncanplay = async () => {
+                    try {
+                        await player.play();
+                        log(`Buffer Active: ${file}`);
                         trackItem.classList.add('is-playing');
-                    })
-                    .catch(e => {
-                        log(`Stream Blocked: ${e.message}`);
-                        trackItem.classList.add('is-error');
-                    });
-                // Remove listener so it doesn't fire again
-                player.oncanplaythrough = null;
-            };
+                    } catch (playErr) {
+                        log(`Play rejected: ${playErr.message}`);
+                    }
+                    player.oncanplay = null;
+                };
+            } catch (loadErr) {
+                log(`Load Error: ${loadErr.message}`);
+                trackItem.classList.add('is-error');
+            }
         }
 
         player.onerror = () => {
