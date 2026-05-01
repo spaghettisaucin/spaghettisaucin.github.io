@@ -190,7 +190,7 @@
 
                 <div id="track-container" class="lg:w-2/3 space-y-px">
                     <!-- Track: waytodothings.mp3 -->
-                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="riddim">
+                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="riddim" data-filename="waytodothings.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/waytodothings.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
                                 <i data-lucide="play" class="play-icon w-4 h-4 ml-0.5"></i>
@@ -215,7 +215,7 @@
                     </div>
 
                     <!-- Track: psytranceeee.mp3 -->
-                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="psytrance">
+                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="psytrance" data-filename="psytranceeee.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/psytranceeee.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
                                 <i data-lucide="play" class="play-icon w-4 h-4 ml-0.5"></i>
@@ -240,7 +240,7 @@
                     </div>
 
                     <!-- Track: parttwo.mp3 -->
-                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="psytrance">
+                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="psytrance" data-filename="parttwo.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/parttwo.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
                                 <i data-lucide="play" class="play-icon w-4 h-4 ml-0.5"></i>
@@ -337,8 +337,8 @@
             });
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // Re-sort tracks if entering the audio page
-            if(pageId === 'audio') sortTracksAlphabetically();
+            // Default to alphabetical when entering audio page
+            if(pageId === 'audio') filterTracks('all');
         }
 
         function filterTracks(category) {
@@ -349,6 +349,8 @@
             
             if (category === 'all') {
                 sortTracksAlphabetically();
+            } else if (category === 'psytrance') {
+                sortPsytranceCustom();
             }
 
             document.querySelectorAll('.track-item').forEach(i => {
@@ -364,6 +366,33 @@
                 const titleA = a.querySelector('.track-title').innerText.toLowerCase();
                 const titleB = b.querySelector('.track-title').innerText.toLowerCase();
                 return titleA.localeCompare(titleB);
+            });
+            
+            tracks.forEach(track => container.appendChild(track));
+        }
+
+        function sortPsytranceCustom() {
+            const container = document.getElementById('track-container');
+            const tracks = Array.from(container.getElementsByClassName('track-item'));
+            
+            // Define custom order for Psytrance
+            const order = ['psytranceeee.mp3', 'parttwo.mp3'];
+            
+            tracks.sort((a, b) => {
+                const fileA = a.dataset.filename;
+                const fileB = b.dataset.filename;
+                
+                let indexA = order.indexOf(fileA);
+                let indexB = order.indexOf(fileB);
+                
+                // If both are in our custom order list
+                if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+                // If only A is in the list, it comes first
+                if (indexA !== -1) return -1;
+                // If only B is in the list, it comes first
+                if (indexB !== -1) return 1;
+                // Otherwise alphabetical for any others
+                return fileA.localeCompare(fileB);
             });
             
             tracks.forEach(track => container.appendChild(track));
