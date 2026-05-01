@@ -173,7 +173,8 @@
 
                     <h2 class="text-4xl font-bold mono italic tracking-tighter uppercase leading-none mb-6">Archive.</h2>
                     <div class="flex flex-col gap-2">
-                        <button onclick="filterTracks('deephouse')" class="filter-btn active text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">01_Deep_House</button>
+                        <button onclick="filterTracks('spotlight')" class="filter-btn active text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">00_Spotlight</button>
+                        <button onclick="filterTracks('deephouse')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">01_Deep_House</button>
                         <button onclick="filterTracks('garage')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">02_Garage_House</button>
                         <button onclick="filterTracks('psytrance')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">03_Psytrance</button>
                         <button onclick="filterTracks('hiphop')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">04_HipHop_Trap</button>
@@ -201,9 +202,13 @@
         const PAYPAL_LINK = 'https://www.paypal.com/ncp/payment/GUT5AGMMRENUU';
 
         const TRACKS = [
+            { id: 'munch', filename: 'munch.mp3', category: 'spotlight', color: 'text-yellow-400', label: '#Spotlight', purchaseUrl: PAYPAL_LINK },
+            { id: 'festive', filename: 'festive.mp3', category: 'spotlight', color: 'text-yellow-400', label: '#Spotlight', purchaseUrl: PAYPAL_LINK },
+            { id: 'grahj', filename: 'grahj.mp3', category: 'spotlight', color: 'text-yellow-400', label: '#Spotlight', purchaseUrl: PAYPAL_LINK },
+            
             { id: 'kgaaaa', filename: 'kgaaaa.mp3', category: 'hiphop', color: 'text-red-400', label: '#HipHop_Trap', purchaseUrl: PAYPAL_LINK },
-            { id: 'festive', filename: 'festive.mp3', category: 'misc', color: 'text-blue-400', label: '#Misc', purchaseUrl: PAYPAL_LINK },
-            { id: 'munch', filename: 'munch.mp3', category: 'misc', color: 'text-blue-400', label: '#Misc', purchaseUrl: PAYPAL_LINK },
+            { id: 'festive_orig', filename: 'festive.mp3', category: 'misc', color: 'text-blue-400', label: '#Misc', purchaseUrl: PAYPAL_LINK },
+            { id: 'munch_orig', filename: 'munch.mp3', category: 'misc', color: 'text-blue-400', label: '#Misc', purchaseUrl: PAYPAL_LINK },
             { id: 'reverse', filename: 'reverse.mp3', category: 'hiphop', color: 'text-red-400', label: '#HipHop_Trap', purchaseUrl: PAYPAL_LINK },
             { id: 'boom_boom', filename: 'boom_boom.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
             { id: 'donk', filename: 'donk.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse', purchaseUrl: PAYPAL_LINK },
@@ -214,7 +219,7 @@
             { id: 'buffet', filename: 'buffet.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
             { id: 'psytranceeee', filename: 'psytranceeee.mp3', category: 'psytrance', color: 'text-indigo-400', label: '#Psytrance', purchaseUrl: PAYPAL_LINK },
             { id: 'parttwo', filename: 'parttwo.mp3', category: 'psytrance', color: 'text-indigo-400', label: '#Psytrance', purchaseUrl: PAYPAL_LINK },
-            { id: 'grahj', filename: 'grahj.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse', purchaseUrl: PAYPAL_LINK }
+            { id: 'grahj_orig', filename: 'grahj.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse', purchaseUrl: PAYPAL_LINK }
         ];
 
         let currentBtn = null;
@@ -238,7 +243,7 @@
                             <div class="flex-grow min-w-0">
                                 <div class="flex justify-between items-start">
                                     <div>
-                                        <h4 class="text-sm font-bold mono tracking-widest uppercase truncate">${track.id}</h4>
+                                        <h4 class="text-sm font-bold mono tracking-widest uppercase truncate">${track.id.replace('_orig', '')}</h4>
                                         <div class="flex gap-4 mt-1 text-[8px] mono uppercase text-white/30">
                                             <span class="${track.color}">${track.label}</span>
                                         </div>
@@ -261,7 +266,7 @@
                 container.insertAdjacentHTML('beforeend', html);
             });
             lucide.createIcons();
-            filterTracks('deephouse');
+            filterTracks('spotlight');
         }
 
         function toggleTrack(btn, file) {
@@ -295,9 +300,19 @@
             const container = document.getElementById('track-container');
             const tracks = Array.from(container.getElementsByClassName('track-item'));
             
-            for (let i = tracks.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
+            // Randomize order unless it's spotlight (to maintain the 1, 2, 3 order)
+            if (category !== 'spotlight') {
+                for (let i = tracks.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
+                }
+            } else {
+                // Sort spotlight by current array order
+                tracks.sort((a, b) => {
+                    const idxA = TRACKS.findIndex(t => t.id === a.dataset.id);
+                    const idxB = TRACKS.findIndex(t => t.id === b.dataset.id);
+                    return idxA - idxB;
+                });
             }
 
             tracks.forEach(track => {
@@ -313,7 +328,7 @@
                 p.classList.toggle('active-page', p.id === `page-${pageId}`);
                 p.classList.toggle('hidden-page', p.id !== `page-${pageId}`);
             });
-            if(pageId === 'audio') filterTracks('deephouse');
+            if(pageId === 'audio') filterTracks('spotlight');
         }
 
         function updateVolume(val) { player.volume = val; lastVolume = val; updateVolumeIcon(val); }
