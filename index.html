@@ -203,6 +203,27 @@
                         </div>
                     </div>
 
+                    <div class="track-item border-b border-white/5 hover:bg-white/[0.02] py-8 px-4" data-category="deephouse" data-filename="boom_boom.mp3">
+                        <div class="flex items-center gap-6">
+                            <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/boom_boom.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black shrink-0">
+                                <i data-lucide="play" class="play-icon w-4 h-4 ml-0.5"></i><i data-lucide="pause" class="pause-icon w-4 h-4"></i>
+                            </button>
+                            <div class="flex-grow min-w-0">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h4 class="text-sm font-bold mono tracking-widest uppercase truncate">boom_boom</h4>
+                                        <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30"><span class="text-emerald-400">#DeepHouse</span></div>
+                                    </div>
+                                    <div class="flex items-center gap-4">
+                                        <span class="time-display mono text-[10px] text-white/20">00:00</span>
+                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/boom_boom.mp3" download class="text-white/20 hover:text-white transition-colors" title="Download"><i data-lucide="download" class="w-3.5 h-3.5"></i></a>
+                                    </div>
+                                </div>
+                                <div class="audio-progress w-full mt-4" onclick="seek(event, this)"><div class="audio-progress-fill"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="track-item border-b border-white/5 hover:bg-white/[0.02] py-8 px-4" data-category="deephouse" data-filename="dracula.mp3">
                         <div class="flex items-center gap-6">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/dracula.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black shrink-0">
@@ -408,7 +429,7 @@
         // Configuration for the spotlighted tracks on the main view
         const SPOTLIGHT_CONFIG = {
             preferredOrder: [
-                '123.mp3', 'parttwo.mp3', 'psytranceeee.mp3', 'grahj.mp3', 'teet.mp3', 'smartfella.mp3', 'dracula.mp3'
+                'boom_boom.mp3', '123.mp3', 'parttwo.mp3', 'psytranceeee.mp3', 'grahj.mp3', 'teet.mp3', 'smartfella.mp3', 'dracula.mp3'
             ]
         };
 
