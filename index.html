@@ -268,11 +268,12 @@
 
     <footer class="py-12 px-6 border-t border-white/5">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v5.6</span>
+            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v5.7</span>
         </div>
     </footer>
 
-    <audio id="global-player" preload="auto" crossorigin="anonymous"></audio>
+    <!-- Removed crossorigin as it can cause issues with local path resolution -->
+    <audio id="global-player" preload="metadata"></audio>
 
     <script>
         lucide.createIcons();
@@ -290,79 +291,72 @@
             const trackItem = btn.closest('.track-item');
             trackItem.classList.remove('is-error');
 
+            // Handle same track click
             if (currentBtn === btn) {
                 if (player.paused) {
-                    log(`Resuming ${file}...`);
-                    player.play().catch(e => log(`Error: ${e.message}`));
+                    player.play().catch(e => log(`Play Error: ${e.message}`));
                     trackItem.classList.add('is-playing');
                 } else {
-                    log(`Paused ${file}`);
                     player.pause();
                     trackItem.classList.remove('is-playing');
                 }
                 return;
             }
 
+            // Reset UI for previous track
             if (currentBtn) {
                 currentBtn.closest('.track-item').classList.remove('is-playing', 'is-error');
             }
 
-            log(`Attempting to load: ${file}`);
+            log(`Root Access: ./${file}`);
             currentBtn = btn;
             
-            // Critical: Fully reset source to force browser re-fetch
+            // Clean reset to ensure the path is re-evaluated relative to the root
             player.pause();
-            player.removeAttribute('src');
-            player.load();
             player.src = file;
+            player.load();
             
-            player.play()
-                .then(() => {
-                    log(`Playing: ${file} (${Math.round(player.duration || 0)}s)`);
-                    trackItem.classList.add('is-playing');
-                })
-                .catch(e => {
-                    log(`FAIL: ${e.message}`);
-                    trackItem.classList.add('is-error');
-                    currentBtn = null;
-                });
+            // Wait for metadata to ensure duration isn't NaN before playing
+            player.onloadedmetadata = () => {
+                player.play()
+                    .then(() => {
+                        log(`Streaming: ${file}`);
+                        trackItem.classList.add('is-playing');
+                    })
+                    .catch(e => {
+                        log(`Stream FAIL: ${e.message}`);
+                        trackItem.classList.add('is-error');
+                    });
+            };
         }
 
         player.onerror = () => {
-            const errorMap = {
-                1: 'Aborted',
-                2: 'Network Error',
-                3: 'Decode Error',
-                4: 'Source Not Found'
-            };
-            const msg = errorMap[player.error?.code] || 'Unknown Audio Error';
-            log(`CRITICAL: ${msg}`);
+            const codes = { 1: 'Abort', 2: 'Network', 3: 'Decode', 4: 'Not Found' };
+            log(`ERROR: ${codes[player.error?.code] || 'Unknown'}`);
             if (currentBtn) currentBtn.closest('.track-item').classList.add('is-error');
         };
 
         player.ontimeupdate = () => {
-            if (!currentBtn) return;
+            if (!currentBtn || isNaN(player.duration)) return;
             const trackItem = currentBtn.closest('.track-item');
             const progressFill = trackItem.querySelector('.audio-progress-fill');
             const timeDisplay = trackItem.querySelector('.time-display');
             
-            if (player.duration > 0) {
-                const percent = (player.currentTime / player.duration) * 100;
-                progressFill.style.width = `${percent}%`;
-                const mins = Math.floor(player.currentTime / 60);
-                const secs = Math.floor(player.currentTime % 60).toString().padStart(2, '0');
-                timeDisplay.innerText = `${mins}:${secs}`;
-            }
+            const percent = (player.currentTime / player.duration) * 100;
+            progressFill.style.width = `${percent}%`;
+            
+            const mins = Math.floor(player.currentTime / 60);
+            const secs = Math.floor(player.currentTime % 60).toString().padStart(2, '0');
+            timeDisplay.innerText = `${mins}:${secs}`;
         };
 
         player.onended = () => {
-            log('Track finished.');
             if (currentBtn) currentBtn.closest('.track-item').classList.remove('is-playing');
             currentBtn = null;
         };
 
         function seek(event, el) {
-            if (!currentBtn || !player.duration) return;
+            if (!currentBtn || isNaN(player.duration)) return;
             const rect = el.getBoundingClientRect();
             player.currentTime = ((event.clientX - rect.left) / rect.width) * player.duration;
         }
