@@ -101,6 +101,8 @@
         .is-playing .pause-icon { display: block; }
         .pause-icon { display: none; }
 
+        .is-error .play-btn { border-color: #ef4444 !important; color: #ef4444 !important; }
+
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: #222; }
@@ -306,7 +308,8 @@
         </div>
     </footer>
 
-    <audio id="global-player"></audio>
+    <!-- Use preload="auto" to encourage the browser to grab metadata immediately -->
+    <audio id="global-player" preload="auto"></audio>
 
     <script>
         lucide.createIcons();
@@ -315,11 +318,14 @@
         let currentBtn = null;
 
         /**
-         * Enhanced toggle function to handle browser play policies
+         * Toggle function with improved source handling and error reporting
          */
         function toggleTrack(btn, file) {
             const trackItem = btn.closest('.track-item');
             
+            // Clear any previous error states
+            trackItem.classList.remove('is-error');
+
             // 1. If clicking the same track
             if (currentBtn === btn) {
                 if (player.paused) {
@@ -332,30 +338,43 @@
                 return;
             }
 
-            // 2. If changing tracks, reset the old UI
+            // 2. Reset previous UI
             if (currentBtn) {
                 const prevItem = currentBtn.closest('.track-item');
-                prevItem.classList.remove('is-playing');
+                prevItem.classList.remove('is-playing', 'is-error');
                 prevItem.querySelector('.audio-progress-fill').style.width = '0%';
                 prevItem.querySelector('.time-display').innerText = '00:00';
             }
 
-            // 3. Load and Play the new track
+            // 3. Update active state
             currentBtn = btn;
-            player.src = file;
-            player.load(); // Explicitly load the source
             
+            // Set source and load
+            player.src = file;
+            player.load();
+            
+            // Attempt playback after loading starts
             player.play()
                 .then(() => {
                     trackItem.classList.add('is-playing');
                 })
                 .catch(e => {
-                    console.error("Audio file not found or browser blocked play:", e);
-                    // Reset UI on failure
+                    console.error("Audio Load Error:", e);
+                    trackItem.classList.add('is-error');
                     trackItem.classList.remove('is-playing');
                     currentBtn = null;
                 });
         }
+
+        // Handle native errors (like 404 or corrupted files)
+        player.onerror = () => {
+            if (currentBtn) {
+                const trackItem = currentBtn.closest('.track-item');
+                trackItem.classList.add('is-error');
+                trackItem.classList.remove('is-playing');
+                console.error("The file could not be played. Check if the file name matches exactly.");
+            }
+        };
 
         player.ontimeupdate = () => {
             if (!currentBtn) return;
@@ -363,11 +382,10 @@
             const progressFill = trackItem.querySelector('.audio-progress-fill');
             const timeDisplay = trackItem.querySelector('.time-display');
             
-            if (player.duration) {
+            if (player.duration && player.duration > 0) {
                 const percent = (player.currentTime / player.duration) * 100;
                 progressFill.style.width = `${percent}%`;
 
-                // Format time
                 const mins = Math.floor(player.currentTime / 60);
                 const secs = Math.floor(player.currentTime % 60).toString().padStart(2, '0');
                 timeDisplay.innerText = `${mins}:${secs}`;
