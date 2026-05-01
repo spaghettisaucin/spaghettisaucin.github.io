@@ -151,7 +151,6 @@
             <section class="min-h-[60vh] flex flex-col justify-center px-6 max-w-7xl mx-auto py-20">
                 <div class="w-full">
                     <p class="text-white/40 mono text-xs uppercase tracking-widest leading-relaxed mb-12">
-                        Audio Software Expert. <br/>
                         Electronic Dance Music
                     </p>
                     <button onclick="showPage('audio')" class="group flex items-center justify-between w-full border border-white/20 px-12 py-10 hover:bg-white hover:text-black transition-all duration-500">
@@ -268,12 +267,12 @@
 
     <footer class="py-12 px-6 border-t border-white/5">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v6.0</span>
+            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v7.0</span>
         </div>
     </footer>
 
-    <!-- Audio element with crossOrigin for potential CDN issues -->
-    <audio id="global-player" preload="auto" crossorigin="anonymous"></audio>
+    <!-- Global player with crossOrigin and no preload to prevent silent buffering -->
+    <audio id="global-player" crossorigin="anonymous"></audio>
 
     <script>
         lucide.createIcons();
@@ -292,65 +291,64 @@
             const trackItem = btn.closest('.track-item');
             trackItem.classList.remove('is-error');
 
-            // Handle pause/play for current track
+            // 1. Same button: Toggle Pause/Play
             if (currentBtn === btn) {
                 if (player.paused) {
                     try {
                         await player.play();
                         trackItem.classList.add('is-playing');
+                        log("Resumed playback.");
                     } catch (e) {
-                        log(`Resume Blocked: ${e.message}`);
+                        log(`Resume failed: ${e.message}`);
                     }
                 } else {
                     player.pause();
                     trackItem.classList.remove('is-playing');
+                    log("Paused playback.");
                 }
                 return;
             }
 
-            // Reset UI for previous track
+            // 2. New track: Reset and Force Load
             if (currentBtn) {
                 currentBtn.closest('.track-item').classList.remove('is-playing', 'is-error');
             }
 
             currentBtn = btn;
-            log(`Fetching: ./${file}`);
+            log(`Loading: ./${file}`);
             
-            // Step 1: Stop and clear existing buffer
+            // Critical Fix for Silent Buffer:
+            // Completely reset the element and force a fresh fetch
             player.pause();
-            player.src = "";
+            player.removeAttribute('src'); 
             player.load();
             
-            // Step 2: Set new source
+            // Reinject source
             player.src = file;
-            
-            // Step 3: Use manual trigger for GitHub Pages delivery
-            try {
-                // Force-fetch the file metadata first
-                await player.load();
-                
-                // We use a small delay to ensure the browser has a valid stream point
-                // some browsers report 'canplay' before they actually have audio data
-                player.oncanplay = async () => {
-                    try {
-                        await player.play();
-                        log(`Buffer Active: ${file}`);
-                        trackItem.classList.add('is-playing');
-                    } catch (playErr) {
-                        log(`Play rejected: ${playErr.message}`);
-                    }
-                    player.oncanplay = null;
-                };
-            } catch (loadErr) {
-                log(`Load Error: ${loadErr.message}`);
-                trackItem.classList.add('is-error');
-            }
+            player.muted = false;
+            player.volume = 1.0;
+
+            // Use 'loadeddata' to ensure at least the first frame/buffer chunk is here
+            player.onloadeddata = async () => {
+                try {
+                    await player.play();
+                    log(`STREAM START: ${file}`);
+                    trackItem.classList.add('is-playing');
+                } catch (playErr) {
+                    log(`PLAY ERROR: ${playErr.message}`);
+                    trackItem.classList.add('is-error');
+                }
+                player.onloadeddata = null; // Clean up listener
+            };
+
+            // Start the loading process
+            player.load();
         }
 
         player.onerror = () => {
             const codes = { 1: 'Abort', 2: 'Network', 3: 'Decode', 4: 'Not Found' };
             const errorType = codes[player.error?.code] || 'Unknown';
-            log(`CRITICAL: ${errorType} - Check filename case.`);
+            log(`CRITICAL: ${errorType} - Check file exists at root.`);
             if (currentBtn) {
                 currentBtn.closest('.track-item').classList.add('is-error');
                 currentBtn.closest('.track-item').classList.remove('is-playing');
@@ -358,7 +356,7 @@
         };
 
         player.ontimeupdate = () => {
-            if (!currentBtn || isNaN(player.duration) || player.duration === Infinity) return;
+            if (!currentBtn || isNaN(player.duration)) return;
             
             const trackItem = currentBtn.closest('.track-item');
             const progressFill = trackItem.querySelector('.audio-progress-fill');
@@ -381,7 +379,7 @@
         };
 
         function seek(event, el) {
-            if (!currentBtn || isNaN(player.duration) || player.duration === Infinity) return;
+            if (!currentBtn || isNaN(player.duration)) return;
             const rect = el.getBoundingClientRect();
             const clickPos = (event.clientX - rect.left) / rect.width;
             player.currentTime = clickPos * player.duration;
