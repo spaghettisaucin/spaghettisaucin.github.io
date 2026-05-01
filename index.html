@@ -325,8 +325,8 @@
                                     <div class="truncate">
                                         <h4 class="track-title text-sm font-bold mono tracking-widest uppercase truncate">grahj</h4>
                                         <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter">
-                                            <span class="text-pink-400">#GarageHouse</span>
-                                            <span>130 BPM</span>
+                                            <span class="text-pink-400">#SpeedGarageHouse</span>
+                                            <span>150 BPM</span>
                                         </div>
                                     </div>
                                     <span class="time-display mono text-[10px] text-white/20 shrink-0">00:00</span>
@@ -393,8 +393,27 @@
         };
 
         player.onended = () => {
-            if (currentBtn) currentBtn.closest('.track-item').classList.remove('is-playing');
-            currentBtn = null;
+            if (currentBtn) {
+                const currentTrackItem = currentBtn.closest('.track-item');
+                currentTrackItem.classList.remove('is-playing');
+                
+                // Autoplay logic: Find all visible tracks in the current view
+                const allVisibleTracks = Array.from(document.querySelectorAll('.track-item'))
+                    .filter(track => track.style.display !== 'none');
+                
+                const currentIndex = allVisibleTracks.indexOf(currentTrackItem);
+                
+                // If there is a next track in the list, play it
+                if (currentIndex !== -1 && currentIndex < allVisibleTracks.length - 1) {
+                    const nextTrack = allVisibleTracks[currentIndex + 1];
+                    const nextBtn = nextTrack.querySelector('.play-btn');
+                    // We need to trigger the play logic for the next button
+                    // Note: toggleTrack needs the source URL which is stored in the onclick
+                    nextBtn.click(); 
+                } else {
+                    currentBtn = null;
+                }
+            }
         };
 
         function seek(event, el) {
