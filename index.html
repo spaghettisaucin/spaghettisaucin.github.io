@@ -267,11 +267,11 @@
 
     <footer class="py-12 px-6 border-t border-white/5">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v8.1</span>
+            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v9.0</span>
         </div>
     </footer>
 
-    <audio id="global-player" preload="metadata"></audio>
+    <audio id="global-player" preload="auto"></audio>
 
     <script>
         lucide.createIcons();
@@ -308,33 +308,37 @@
             }
 
             currentBtn = btn;
+            log(`INIT: ${file}`);
             
-            // Cache busting: GitHub Pages can be aggressive with caching 404s or empty partials
-            const cacheBuster = `?t=${Date.now()}`;
-            const finalPath = `./${file}${cacheBuster}`;
-            
-            log(`Fecthing: ${file}`);
-            
+            // Clean slate
             player.pause();
-            player.src = finalPath;
+            player.src = "";
             player.load();
-
-            // Explicitly wait for duration change to confirm we have a real file
-            player.ondurationchange = async () => {
+            
+            // Set source
+            player.src = file;
+            player.volume = 1.0;
+            
+            // Wait for metadata to know length
+            player.onloadedmetadata = async () => {
+                log(`META OK: ${Math.round(player.duration)}s`);
                 try {
-                    log(`Buffer OK: ${Math.round(player.duration)}s`);
                     await player.play();
                     trackItem.classList.add('is-playing');
-                } catch (err) {
-                    log(`Play Rejected: ${err.message}`);
+                } catch (e) {
+                    log(`PLAY REJECTED: ${e.message}`);
                     trackItem.classList.add('is-error');
                 }
-                player.ondurationchange = null;
             };
+
+            player.onstalled = () => log("STALLED: Network lag");
+            player.onwaiting = () => log("WAITING: Buffering...");
         }
 
         player.onerror = () => {
-            log(`CRITICAL: Error Code ${player.error?.code || 'Unknown'}`);
+            const codes = ["None", "Aborted", "Network", "Decode", "Src Not Supported"];
+            const code = player.error ? player.error.code : 0;
+            log(`CRITICAL: ${codes[code]}`);
             if (currentBtn) {
                 currentBtn.closest('.track-item').classList.add('is-error');
                 currentBtn.closest('.track-item').classList.remove('is-playing');
