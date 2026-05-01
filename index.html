@@ -112,7 +112,7 @@
         #debug-log {
             font-family: 'Space Mono', monospace;
             font-size: 8px;
-            color: rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.4);
             padding: 10px;
             background: rgba(0,0,0,0.5);
             border: 1px solid rgba(255,255,255,0.05);
@@ -268,12 +268,11 @@
 
     <footer class="py-12 px-6 border-t border-white/5">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v5.7</span>
+            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v5.8</span>
         </div>
     </footer>
 
-    <!-- Removed crossorigin as it can cause issues with local path resolution -->
-    <audio id="global-player" preload="metadata"></audio>
+    <audio id="global-player" preload="auto"></audio>
 
     <script>
         lucide.createIcons();
@@ -285,16 +284,17 @@
         function log(msg) {
             const time = new Date().toLocaleTimeString().split(' ')[0];
             debugLog.innerHTML = `[${time}] ${msg}<br>` + debugLog.innerHTML;
+            console.log(`[${time}] ${msg}`);
         }
 
         function toggleTrack(btn, file) {
             const trackItem = btn.closest('.track-item');
             trackItem.classList.remove('is-error');
 
-            // Handle same track click
+            // Handle pause/play for current track
             if (currentBtn === btn) {
                 if (player.paused) {
-                    player.play().catch(e => log(`Play Error: ${e.message}`));
+                    player.play().catch(e => log(`Resume Fail: ${e.message}`));
                     trackItem.classList.add('is-playing');
                 } else {
                     player.pause();
@@ -308,34 +308,43 @@
                 currentBtn.closest('.track-item').classList.remove('is-playing', 'is-error');
             }
 
-            log(`Root Access: ./${file}`);
             currentBtn = btn;
+            log(`Loading: ./${file}`);
             
-            // Clean reset without race conditions
+            // Clean state reset
             player.pause();
             player.src = file;
             player.load();
             
-            // Attempt to play immediately
-            player.play()
-                .then(() => {
-                    log(`Streaming: ${file}`);
-                    trackItem.classList.add('is-playing');
-                })
-                .catch(e => {
-                    log(`Stream FAIL: ${e.message}`);
-                    trackItem.classList.add('is-error');
-                });
+            // Event listener for reliable play on GitHub Pages
+            player.oncanplaythrough = () => {
+                player.play()
+                    .then(() => {
+                        log(`Streaming OK: ${file}`);
+                        trackItem.classList.add('is-playing');
+                    })
+                    .catch(e => {
+                        log(`Stream Blocked: ${e.message}`);
+                        trackItem.classList.add('is-error');
+                    });
+                // Remove listener so it doesn't fire again
+                player.oncanplaythrough = null;
+            };
         }
 
         player.onerror = () => {
             const codes = { 1: 'Abort', 2: 'Network', 3: 'Decode', 4: 'Not Found' };
-            log(`ERROR: ${codes[player.error?.code] || 'Unknown'}`);
-            if (currentBtn) currentBtn.closest('.track-item').classList.add('is-error');
+            const errorType = codes[player.error?.code] || 'Unknown';
+            log(`CRITICAL: ${errorType} - Check filename case.`);
+            if (currentBtn) {
+                currentBtn.closest('.track-item').classList.add('is-error');
+                currentBtn.closest('.track-item').classList.remove('is-playing');
+            }
         };
 
         player.ontimeupdate = () => {
-            if (!currentBtn || isNaN(player.duration)) return;
+            if (!currentBtn || isNaN(player.duration) || player.duration === Infinity) return;
+            
             const trackItem = currentBtn.closest('.track-item');
             const progressFill = trackItem.querySelector('.audio-progress-fill');
             const timeDisplay = trackItem.querySelector('.time-display');
@@ -349,14 +358,18 @@
         };
 
         player.onended = () => {
-            if (currentBtn) currentBtn.closest('.track-item').classList.remove('is-playing');
+            if (currentBtn) {
+                currentBtn.closest('.track-item').classList.remove('is-playing');
+                currentBtn.querySelector('.audio-progress-fill').style.width = '0%';
+            }
             currentBtn = null;
         };
 
         function seek(event, el) {
-            if (!currentBtn || isNaN(player.duration)) return;
+            if (!currentBtn || isNaN(player.duration) || player.duration === Infinity) return;
             const rect = el.getBoundingClientRect();
-            player.currentTime = ((event.clientX - rect.left) / rect.width) * player.duration;
+            const clickPos = (event.clientX - rect.left) / rect.width;
+            player.currentTime = clickPos * player.duration;
         }
 
         function showPage(pageId) {
