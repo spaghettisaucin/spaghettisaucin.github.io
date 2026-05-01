@@ -179,7 +179,7 @@
                         Categorized music. <br/> Filter by genre via nodes below.
                     </p>
                     <div class="flex flex-col gap-2">
-                        <button onclick="filterTracks('newest')" class="filter-btn active text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">00_Newest</button>
+                        <button onclick="filterTracks('all')" class="filter-btn active text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">00_Spotlight</button>
                         <button onclick="filterTracks('psytrance')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">01_Psytrance</button>
                         <button onclick="filterTracks('deephouse')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">02_Deep_House</button>
                         <button onclick="filterTracks('garage')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">03_Garage_House</button>
@@ -189,6 +189,7 @@
                 </aside>
 
                 <div id="track-container" class="lg:w-2/3 space-y-px">
+                    <!-- Tracks are injected/managed via JS -->
                     <!-- Track: littyabopenheimer(remix)feat-halpa.mp3 -->
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="hiphop" data-filename="littyabopenheimer(remix)feat-halpa.mp3">
                         <div class="flex items-center gap-8">
@@ -577,7 +578,7 @@
             });
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            if(pageId === 'audio') filterTracks('newest');
+            if(pageId === 'audio') filterTracks('all');
         }
 
         function filterTracks(category) {
@@ -586,11 +587,18 @@
                 b.classList.toggle('active', isActive);
             });
             
-            if (category === 'newest') {
+            if (category === 'all') {
                 sortTracksRandomly();
                 document.querySelectorAll('.track-item').forEach(i => {
                     const cat = i.dataset.category;
-                    i.style.display = (cat === 'psytrance' || cat === 'deephouse' || cat === 'garage' || cat === 'hiphop' || cat === 'riddim') ? 'block' : 'none';
+                    const filename = i.dataset.filename;
+                    
+                    // Spotlight logic: only Psytrance and Garage House
+                    const isSpotlightGenre = (cat === 'psytrance' || cat === 'garage');
+                    // Exclusion logic: exclude 123.mp3
+                    const isNotExcluded = (filename !== '123.mp3');
+                    
+                    i.style.display = (isSpotlightGenre && isNotExcluded) ? 'block' : 'none';
                 });
             } else {
                 if (category === 'psytrance') {
@@ -602,15 +610,10 @@
             }
         }
 
-        /**
-         * Shuffles the tracks in the container to provide a randomized experience
-         * for the "Newest" category.
-         */
         function sortTracksRandomly() {
             const container = document.getElementById('track-container');
             const tracks = Array.from(container.getElementsByClassName('track-item'));
             
-            // Fisher-Yates Shuffle Algorithm
             for (let i = tracks.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
