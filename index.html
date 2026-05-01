@@ -110,7 +110,7 @@
         <div class="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
             <div class="flex items-center gap-6 cursor-pointer" onclick="showPage('home')">
                 <div class="flex flex-col">
-                    <span class="text-xl md:text-2xl font-bold tracking-tighter mono uppercase italic">spaghettisauce123</span>
+                    <span class="text-xl md:text-2xl font-bold tracking-tighter mono uppercase italic leading-none">spaghettisauce123</span>
                     <span class="text-[10px] mono uppercase tracking-[0.4em] text-white/30 mt-1">DJ / Producer</span>
                 </div>
                 <img src="Bingo.jpg" alt="Profile Visual" class="hero-image-nav rounded-sm" onerror="this.style.display='none';">
@@ -152,25 +152,25 @@
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <!-- Instagram (Pink) -->
-                        <a href="#" class="glass-card p-10 flex flex-col gap-2 group">
+                        <a href="https://instagram.com/zachp123_" target="_blank" class="glass-card p-10 flex flex-col gap-2 group">
                             <p class="mono text-[9px] uppercase text-[#E4405F] mb-1 font-bold tracking-widest">Instagram</p>
                             <p class="mono text-sm uppercase tracking-widest">@zachp123_</p>
                         </a>
 
                         <!-- YouTube (Red) -->
-                        <a href="#" class="glass-card p-10 flex flex-col gap-2 group">
+                        <a href="https://youtube.com/@spaghettisauce123" target="_blank" class="glass-card p-10 flex flex-col gap-2 group">
                             <p class="mono text-[9px] uppercase text-[#FF0000] mb-1 font-bold tracking-widest">YouTube</p>
                             <p class="mono text-sm uppercase tracking-widest">spaghettisauce123</p>
                         </a>
 
                         <!-- SoundCloud (Orange) -->
-                        <a href="#" class="glass-card p-10 flex flex-col gap-2 group">
+                        <a href="https://soundcloud.com/spaghettisauce123" target="_blank" class="glass-card p-10 flex flex-col gap-2 group">
                             <p class="mono text-[9px] uppercase text-[#FF3300] mb-1 font-bold tracking-widest">SoundCloud</p>
                             <p class="mono text-sm uppercase tracking-widest">spaghettisauce123</p>
                         </a>
 
                         <!-- Spotify (Green) -->
-                        <a href="#" class="glass-card p-10 flex flex-col gap-2 group">
+                        <a href="https://open.spotify.com/artist/spaghettisauce123" target="_blank" class="glass-card p-10 flex flex-col gap-2 group">
                             <p class="mono text-[9px] uppercase text-[#1DB954] mb-1 font-bold tracking-widest">Spotify</p>
                             <p class="mono text-sm uppercase tracking-widest">spaghettisauce123</p>
                         </a>
@@ -205,27 +205,53 @@
                             <div class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
                             <span class="mono text-[8px] text-white/20 uppercase">System_Active</span>
                         </div>
-                        <span class="mono text-[8px] text-white/20 uppercase">Storage_Usage: 14%</span>
+                        <span class="mono text-[8px] text-white/20 uppercase">Storage_Usage: 18%</span>
                     </div>
                 </aside>
 
                 <div id="track-container" class="lg:w-2/3 space-y-px">
+                    <!-- New Track 1 -->
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="psytrance">
                         <div class="flex items-center gap-8">
-                            <button class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
+                            <button onclick="playTrack('psytranceeee.wav')" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
                                 <i data-lucide="play" class="w-4 h-4 ml-0.5"></i>
                             </button>
                             <div class="flex-grow min-w-0">
                                 <div class="flex justify-between items-start gap-4">
                                     <div class="truncate">
-                                        <h4 class="text-sm font-bold mono tracking-widest uppercase truncate">Neural_Dynamics_V2</h4>
+                                        <h4 class="text-sm font-bold mono tracking-widest uppercase truncate">psytranceeee</h4>
                                         <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter">
                                             <span class="text-indigo-400">#Psytrance</span>
-                                            <span>145 BPM</span>
+                                            <span>150 BPM</span>
                                             <span>WAV</span>
                                         </div>
                                     </div>
-                                    <span class="mono text-[10px] text-white/20 shrink-0">07:42</span>
+                                    <span class="mono text-[10px] text-white/20 shrink-0">--:--</span>
+                                </div>
+                                <div class="audio-progress w-full mt-4 opacity-10 group-hover:opacity-40 transition-opacity">
+                                    <div class="audio-progress-fill"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- New Track 2 -->
+                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="psytrance">
+                        <div class="flex items-center gap-8">
+                            <button onclick="playTrack('parttwo.wav')" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
+                                <i data-lucide="play" class="w-4 h-4 ml-0.5"></i>
+                            </button>
+                            <div class="flex-grow min-w-0">
+                                <div class="flex justify-between items-start gap-4">
+                                    <div class="truncate">
+                                        <h4 class="text-sm font-bold mono tracking-widest uppercase truncate">parttwo</h4>
+                                        <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter">
+                                            <span class="text-indigo-400">#Psytrance</span>
+                                            <span>150 BPM</span>
+                                            <span>WAV</span>
+                                        </div>
+                                    </div>
+                                    <span class="mono text-[10px] text-white/20 shrink-0">--:--</span>
                                 </div>
                                 <div class="audio-progress w-full mt-4 opacity-10 group-hover:opacity-40 transition-opacity">
                                     <div class="audio-progress-fill"></div>
@@ -294,14 +320,25 @@
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
             <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v5.5</span>
             <div class="flex gap-6 text-white/20">
-                <a href="#" class="hover:text-white transition-colors"><i data-lucide="mail" class="w-3 h-3"></i></a>
+                <a href="mailto:contact@spaghettisauce123.com" class="hover:text-white transition-colors"><i data-lucide="mail" class="w-3 h-3"></i></a>
                 <a href="#" class="hover:text-white transition-colors text-[9px] mono uppercase">Terms</a>
             </div>
         </div>
     </footer>
 
+    <audio id="global-player"></audio>
+
     <script>
         lucide.createIcons();
+
+        const player = document.getElementById('global-player');
+
+        function playTrack(file) {
+            // Logic for playing actual files once hosted
+            console.log(`Loading: ${file}`);
+            // player.src = file;
+            // player.play();
+        }
 
         function showPage(pageId) {
             const pages = ['home', 'audio'];
