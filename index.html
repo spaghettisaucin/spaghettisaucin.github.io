@@ -101,7 +101,24 @@
         .is-playing .pause-icon { display: block; }
         .pause-icon { display: none; }
 
-        .is-error .play-btn { border-color: #ef4444 !important; color: #ef4444 !important; }
+        .is-error .play-btn { border-color: #ef4444 !important; color: #ef4444 !important; animation: shake 0.5s ease; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+        #debug-log {
+            font-family: 'Space Mono', monospace;
+            font-size: 8px;
+            color: rgba(255,255,255,0.2);
+            padding: 10px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.05);
+            max-height: 100px;
+            overflow-y: auto;
+        }
 
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: #000; }
@@ -112,7 +129,6 @@
 <body class="selection:bg-white selection:text-black">
     <div class="scanline"></div>
 
-    <!-- Minimal Header / Nav -->
     <nav class="fixed top-0 w-full z-50 border-b border-white/5 bg-black/90 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
             <div class="flex items-center gap-6 cursor-pointer" onclick="showPage('home')">
@@ -129,19 +145,15 @@
         </div>
     </nav>
 
-    <!-- Main Content Area -->
     <main class="pt-24">
-        
         <!-- HOME PAGE -->
         <div id="page-home" class="page-transition active-page">
             <section class="min-h-[60vh] flex flex-col justify-center px-6 max-w-7xl mx-auto py-20">
                 <div class="w-full">
-                    
                     <p class="text-white/40 mono text-xs uppercase tracking-widest leading-relaxed mb-12">
                         Fruity Loops Studio Expert. <br/>
                         Electronic Dance Music // HipHop
                     </p>
-                    
                     <button onclick="showPage('audio')" class="group flex items-center justify-between w-full border border-white/20 px-12 py-10 hover:bg-white hover:text-black transition-all duration-500">
                         <span class="mono text-[14px] font-bold tracking-[0.6em] uppercase">Enter_Audio_Archive</span>
                         <i data-lucide="arrow-right" class="w-6 h-6 group-hover:translate-x-4 transition-transform"></i>
@@ -149,30 +161,26 @@
                 </div>
             </section>
 
-            <!-- Social Handles Section -->
-            <section id="about" class="py-24 px-6 border-t border-white/5 bg-zinc-950/20">
+            <!-- Social Handles -->
+            <section class="py-24 px-6 border-t border-white/5 bg-zinc-950/20">
                 <div class="max-w-7xl mx-auto">
                     <div class="flex items-center gap-4 mb-12">
                         <h3 class="text-xl font-bold mono italic uppercase tracking-tighter">Social_Nodes</h3>
                         <div class="h-px flex-grow bg-white/5"></div>
                     </div>
-                    
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         <a href="https://instagram.com/zachp123_" target="_blank" class="glass-card p-10 flex flex-col gap-2 group">
                             <p class="mono text-[9px] uppercase text-[#E4405F] mb-1 font-bold tracking-widest">Instagram</p>
                             <p class="mono text-sm uppercase tracking-widest">@zachp123_</p>
                         </a>
-
                         <a href="https://youtube.com/@spaghettisauce123" target="_blank" class="glass-card p-10 flex flex-col gap-2 group">
                             <p class="mono text-[9px] uppercase text-[#FF0000] mb-1 font-bold tracking-widest">YouTube</p>
                             <p class="mono text-sm uppercase tracking-widest">spaghettisauce123</p>
                         </a>
-
                         <a href="https://soundcloud.com/spaghettisauce123" target="_blank" class="glass-card p-10 flex flex-col gap-2 group">
                             <p class="mono text-[9px] uppercase text-[#FF3300] mb-1 font-bold tracking-widest">SoundCloud</p>
                             <p class="mono text-sm uppercase tracking-widest">spaghettisauce123</p>
                         </a>
-
                         <a href="https://open.spotify.com/artist/spaghettisauce123" target="_blank" class="glass-card p-10 flex flex-col gap-2 group">
                             <p class="mono text-[9px] uppercase text-[#1DB954] mb-1 font-bold tracking-widest">Spotify</p>
                             <p class="mono text-sm uppercase tracking-widest">spaghettisauce123</p>
@@ -182,39 +190,30 @@
             </section>
         </div>
 
-        <!-- AUDIO ARCHIVE PAGE -->
+        <!-- AUDIO ARCHIVE -->
         <div id="page-audio" class="page-transition hidden-page">
             <div class="max-w-7xl mx-auto px-6 py-12 lg:flex gap-20">
-                
                 <aside class="lg:w-1/3 lg:sticky lg:top-32 lg:h-fit mb-16 lg:mb-0">
                     <button onclick="showPage('home')" class="mono text-[9px] text-white/30 hover:text-white flex items-center gap-2 mb-8 transition-colors">
                         <i data-lucide="chevron-left" class="w-3 h-3"></i> Exit_To_Root
                     </button>
-                    
                     <h2 class="text-4xl font-bold mono italic tracking-tighter uppercase leading-none mb-6">Archive.</h2>
                     <p class="text-white/30 text-[10px] mono uppercase tracking-widest leading-relaxed mb-12">
                         Categorized frequency logs. <br/> Filter by genre via nodes below.
                     </p>
-
                     <div class="flex flex-col gap-2">
                         <button onclick="filterTracks('all')" class="filter-btn active text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">00_All_Files</button>
                         <button onclick="filterTracks('psytrance')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">01_Psytrance</button>
-                        <button onclick="filterTracks('hiphop')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">02_HipHop</button>
-                        <button onclick="filterTracks('rnb')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">03_R&B_Vibes</button>
                     </div>
-
-                    <div class="mt-20 pt-8 border-t border-white/5 hidden lg:block">
-                        <div class="flex items-center gap-2 mb-2">
-                            <div class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-                            <span class="mono text-[8px] text-white/20 uppercase">System_Active</span>
-                        </div>
-                        <span id="storage-indicator" class="mono text-[8px] text-white/20 uppercase">Storage_Usage: 18%</span>
+                    <div id="debug-container" class="mt-8">
+                        <p class="mono text-[7px] text-white/20 uppercase mb-2">Internal_System_Log</p>
+                        <div id="debug-log">Ready...</div>
                     </div>
                 </aside>
 
                 <div id="track-container" class="lg:w-2/3 space-y-px">
-                    <!-- Track 1: psytranceeee.mp3 -->
-                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="psytrance" data-file="psytranceeee.mp3">
+                    <!-- Track: psytranceeee.mp3 -->
+                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="psytrance">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'psytranceeee.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
                                 <i data-lucide="play" class="play-icon w-4 h-4 ml-0.5"></i>
@@ -227,7 +226,6 @@
                                         <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter">
                                             <span class="text-indigo-400">#Psytrance</span>
                                             <span>150 BPM</span>
-                                            <span>MP3</span>
                                         </div>
                                     </div>
                                     <span class="time-display mono text-[10px] text-white/20 shrink-0">00:00</span>
@@ -239,8 +237,8 @@
                         </div>
                     </div>
 
-                    <!-- Track 2: parttwo.mp3 -->
-                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="psytrance" data-file="parttwo.mp3">
+                    <!-- Track: parttwo.mp3 -->
+                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="psytrance">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'parttwo.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
                                 <i data-lucide="play" class="play-icon w-4 h-4 ml-0.5"></i>
@@ -253,7 +251,6 @@
                                         <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter">
                                             <span class="text-indigo-400">#Psytrance</span>
                                             <span>150 BPM</span>
-                                            <span>MP3</span>
                                         </div>
                                     </div>
                                     <span class="time-display mono text-[10px] text-white/20 shrink-0">00:00</span>
@@ -264,35 +261,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Locked Track Example -->
-                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="hiphop">
-                        <div class="flex items-center gap-8 opacity-40">
-                            <button class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center cursor-not-allowed">
-                                <i data-lucide="lock" class="w-4 h-4"></i>
-                            </button>
-                            <div class="flex-grow min-w-0">
-                                <div class="flex justify-between items-start gap-4">
-                                    <div class="truncate">
-                                        <h4 class="text-sm font-bold mono tracking-widest uppercase truncate">Concrete_Dreams</h4>
-                                        <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter">
-                                            <span class="text-amber-400">#HipHop</span>
-                                            <span>92 BPM</span>
-                                            <span>Locked</span>
-                                        </div>
-                                    </div>
-                                    <span class="mono text-[10px] text-white/20 shrink-0">--:--</span>
-                                </div>
-                                <div class="audio-progress w-full mt-4">
-                                    <div class="audio-progress-fill"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pt-20 text-center">
-                        <p class="mono text-[8px] text-white/10 uppercase tracking-[0.8em]">End_Of_Archive</p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -300,80 +268,76 @@
 
     <footer class="py-12 px-6 border-t border-white/5">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v5.5</span>
-            <div class="flex gap-6 text-white/20">
-                <a href="mailto:contact@spaghettisauce123.com" class="hover:text-white transition-colors"><i data-lucide="mail" class="w-3 h-3"></i></a>
-                <a href="#" class="hover:text-white transition-colors text-[9px] mono uppercase">Terms</a>
-            </div>
+            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v5.6</span>
         </div>
     </footer>
 
-    <!-- Use preload="auto" to encourage the browser to grab metadata immediately -->
-    <audio id="global-player" preload="auto"></audio>
+    <audio id="global-player" preload="auto" crossorigin="anonymous"></audio>
 
     <script>
         lucide.createIcons();
 
         const player = document.getElementById('global-player');
+        const debugLog = document.getElementById('debug-log');
         let currentBtn = null;
 
-        /**
-         * Toggle function with improved source handling and error reporting
-         */
+        function log(msg) {
+            const time = new Date().toLocaleTimeString().split(' ')[0];
+            debugLog.innerHTML = `[${time}] ${msg}<br>` + debugLog.innerHTML;
+        }
+
         function toggleTrack(btn, file) {
             const trackItem = btn.closest('.track-item');
-            
-            // Clear any previous error states
             trackItem.classList.remove('is-error');
 
-            // 1. If clicking the same track
             if (currentBtn === btn) {
                 if (player.paused) {
-                    player.play().catch(e => console.error("Playback error:", e));
+                    log(`Resuming ${file}...`);
+                    player.play().catch(e => log(`Error: ${e.message}`));
                     trackItem.classList.add('is-playing');
                 } else {
+                    log(`Paused ${file}`);
                     player.pause();
                     trackItem.classList.remove('is-playing');
                 }
                 return;
             }
 
-            // 2. Reset previous UI
             if (currentBtn) {
-                const prevItem = currentBtn.closest('.track-item');
-                prevItem.classList.remove('is-playing', 'is-error');
-                prevItem.querySelector('.audio-progress-fill').style.width = '0%';
-                prevItem.querySelector('.time-display').innerText = '00:00';
+                currentBtn.closest('.track-item').classList.remove('is-playing', 'is-error');
             }
 
-            // 3. Update active state
+            log(`Attempting to load: ${file}`);
             currentBtn = btn;
             
-            // Set source and load
-            player.src = file;
+            // Critical: Fully reset source to force browser re-fetch
+            player.pause();
+            player.removeAttribute('src');
             player.load();
+            player.src = file;
             
-            // Attempt playback after loading starts
             player.play()
                 .then(() => {
+                    log(`Playing: ${file} (${Math.round(player.duration || 0)}s)`);
                     trackItem.classList.add('is-playing');
                 })
                 .catch(e => {
-                    console.error("Audio Load Error:", e);
+                    log(`FAIL: ${e.message}`);
                     trackItem.classList.add('is-error');
-                    trackItem.classList.remove('is-playing');
                     currentBtn = null;
                 });
         }
 
-        // Handle native errors (like 404 or corrupted files)
         player.onerror = () => {
-            if (currentBtn) {
-                const trackItem = currentBtn.closest('.track-item');
-                trackItem.classList.add('is-error');
-                trackItem.classList.remove('is-playing');
-                console.error("The file could not be played. Check if the file name matches exactly.");
-            }
+            const errorMap = {
+                1: 'Aborted',
+                2: 'Network Error',
+                3: 'Decode Error',
+                4: 'Source Not Found'
+            };
+            const msg = errorMap[player.error?.code] || 'Unknown Audio Error';
+            log(`CRITICAL: ${msg}`);
+            if (currentBtn) currentBtn.closest('.track-item').classList.add('is-error');
         };
 
         player.ontimeupdate = () => {
@@ -382,10 +346,9 @@
             const progressFill = trackItem.querySelector('.audio-progress-fill');
             const timeDisplay = trackItem.querySelector('.time-display');
             
-            if (player.duration && player.duration > 0) {
+            if (player.duration > 0) {
                 const percent = (player.currentTime / player.duration) * 100;
                 progressFill.style.width = `${percent}%`;
-
                 const mins = Math.floor(player.currentTime / 60);
                 const secs = Math.floor(player.currentTime % 60).toString().padStart(2, '0');
                 timeDisplay.innerText = `${mins}:${secs}`;
@@ -393,49 +356,29 @@
         };
 
         player.onended = () => {
-            if (currentBtn) {
-                currentBtn.closest('.track-item').classList.remove('is-playing');
-                currentBtn = null;
-            }
+            log('Track finished.');
+            if (currentBtn) currentBtn.closest('.track-item').classList.remove('is-playing');
+            currentBtn = null;
         };
 
         function seek(event, el) {
-            if (!currentBtn || !player.src || !player.duration) return;
+            if (!currentBtn || !player.duration) return;
             const rect = el.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const percent = x / rect.width;
-            player.currentTime = percent * player.duration;
+            player.currentTime = ((event.clientX - rect.left) / rect.width) * player.duration;
         }
 
         function showPage(pageId) {
-            const pages = ['home', 'audio'];
-            pages.forEach(p => {
-                const pageEl = document.getElementById(`page-${p}`);
-                if (p === pageId) {
-                    pageEl.classList.remove('hidden-page');
-                    pageEl.classList.add('active-page');
-                } else {
-                    pageEl.classList.add('hidden-page');
-                    pageEl.classList.remove('active-page');
-                }
+            document.querySelectorAll('.page-transition').forEach(p => {
+                p.classList.toggle('active-page', p.id === `page-${pageId}`);
+                p.classList.toggle('hidden-page', p.id !== `page-${pageId}`);
             });
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function filterTracks(category) {
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (category === 'all' && btn.innerText.includes('00_All')) btn.classList.add('active');
-                else if (btn.innerText.toLowerCase().includes(category.toLowerCase())) btn.classList.add('active');
-            });
-
-            const items = document.querySelectorAll('.track-item');
-            items.forEach(item => {
-                if (category === 'all' || item.getAttribute('data-category') === category) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.innerText.toLowerCase().includes(category)));
+            document.querySelectorAll('.track-item').forEach(i => {
+                i.style.display = (category === 'all' || i.dataset.category === category) ? 'block' : 'none';
             });
         }
     </script>
