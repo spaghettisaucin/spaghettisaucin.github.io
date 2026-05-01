@@ -25,11 +25,6 @@
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .glass-card:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
         .audio-progress {
             height: 2px;
             background: rgba(255, 255, 255, 0.05);
@@ -114,9 +109,13 @@
     </nav>
 
     <main class="pt-40 md:pt-24">
+        <!-- HOME PAGE -->
         <div id="page-home" class="page-transition active-page">
             <section class="min-h-[60vh] flex flex-col justify-center px-6 max-w-7xl mx-auto py-20">
-                <div class="w-full">
+                <div class="w-full flex flex-col items-center md:items-start">
+                    <div class="mb-4 ml-1">
+                        <span class="mono text-[8px] md:text-[10px] uppercase tracking-[0.4em] text-white/40 italic">Free High Quality Downloadable MP3s</span>
+                    </div>
                     <button onclick="showPage('audio')" class="group flex items-center justify-between w-full border border-white/20 px-6 md:px-12 py-8 md:py-10 hover:bg-white hover:text-black transition-all duration-500">
                         <span class="mono text-[10px] sm:text-[12px] md:text-[14px] font-bold tracking-[0.2em] sm:tracking-[0.6em] uppercase truncate mr-2">Enter_Audio_Archive</span>
                         <i data-lucide="arrow-right" class="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-4 transition-transform shrink-0"></i>
@@ -125,6 +124,7 @@
             </section>
         </div>
 
+        <!-- AUDIO ARCHIVE PAGE -->
         <div id="page-audio" class="page-transition hidden-page">
             <div class="max-w-7xl mx-auto px-6 py-12 lg:flex gap-20">
                 <aside class="lg:w-1/3 lg:sticky lg:top-32 lg:h-fit mb-16">
@@ -136,12 +136,17 @@
                         <button onclick="filterTracks('psytrance')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">03_Psytrance</button>
                         <button onclick="filterTracks('riddim')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">04_Riddim</button>
                         <button onclick="filterTracks('hiphop')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">05_HipHop_Trap</button>
+                        
+                        <!-- Added Back to Root Button -->
+                        <button onclick="showPage('home')" class="mt-8 text-left px-5 py-3 border border-white/5 hover:border-white/20 mono text-[8px] uppercase tracking-[0.3em] text-white/30 flex items-center justify-between group">
+                            <span>Exit_To_Root</span>
+                            <i data-lucide="corner-up-left" class="w-3 h-3 group-hover:-translate-y-1 transition-transform"></i>
+                        </button>
                     </div>
                 </aside>
 
                 <div id="track-container" class="lg:w-2/3 space-y-px">
-                    <!-- Audio items -->
-                    <!-- Pattern: Track URL, Filename, Category, Color-Class -->
+                    <!-- Track List remains unchanged in structure, but ensures download attributes are correct -->
                     <div class="track-item border-b border-white/5 hover:bg-white/[0.02] py-8 px-4" data-category="hiphop" data-filename="littyabopenheimer(remix)feat-halpa.mp3">
                         <div class="flex items-center gap-6">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/littyabopenheimer(remix)feat-halpa.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black shrink-0">
@@ -158,7 +163,7 @@
                                     </div>
                                     <div class="flex items-center gap-4">
                                         <span class="time-display mono text-[10px] text-white/20">00:00</span>
-                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/littyabopenheimer(remix)feat-halpa.mp3" download="littyabopenheimer(remix)feat-halpa.mp3" class="text-white/20 hover:text-white transition-colors" title="Download">
+                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/littyabopenheimer(remix)feat-halpa.mp3" download class="text-white/20 hover:text-white transition-colors" title="Download">
                                             <i data-lucide="download" class="w-3.5 h-3.5"></i>
                                         </a>
                                     </div>
@@ -183,7 +188,7 @@
                                     </div>
                                     <div class="flex items-center gap-4">
                                         <span class="time-display mono text-[10px] text-white/20">00:00</span>
-                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/reverse.mp3" download="reverse.mp3" class="text-white/20 hover:text-white transition-colors" title="Download">
+                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/reverse.mp3" download class="text-white/20 hover:text-white transition-colors" title="Download">
                                             <i data-lucide="download" class="w-3.5 h-3.5"></i>
                                         </a>
                                     </div>
@@ -208,7 +213,7 @@
                                     </div>
                                     <div class="flex items-center gap-4">
                                         <span class="time-display mono text-[10px] text-white/20">00:00</span>
-                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/dracula.mp3" download="dracula.mp3" class="text-white/20 hover:text-white transition-colors" title="Download">
+                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/dracula.mp3" download class="text-white/20 hover:text-white transition-colors" title="Download">
                                             <i data-lucide="download" class="w-3.5 h-3.5"></i>
                                         </a>
                                     </div>
@@ -233,7 +238,7 @@
                                     </div>
                                     <div class="flex items-center gap-4">
                                         <span class="time-display mono text-[10px] text-white/20">00:00</span>
-                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/123.mp3" download="123.mp3" class="text-white/20 hover:text-white transition-colors" title="Download">
+                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/123.mp3" download class="text-white/20 hover:text-white transition-colors" title="Download">
                                             <i data-lucide="download" class="w-3.5 h-3.5"></i>
                                         </a>
                                     </div>
@@ -258,7 +263,7 @@
                                     </div>
                                     <div class="flex items-center gap-4">
                                         <span class="time-display mono text-[10px] text-white/20">00:00</span>
-                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/smartfella.mp3" download="smartfella.mp3" class="text-white/20 hover:text-white transition-colors" title="Download">
+                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/smartfella.mp3" download class="text-white/20 hover:text-white transition-colors" title="Download">
                                             <i data-lucide="download" class="w-3.5 h-3.5"></i>
                                         </a>
                                     </div>
@@ -283,7 +288,7 @@
                                     </div>
                                     <div class="flex items-center gap-4">
                                         <span class="time-display mono text-[10px] text-white/20">00:00</span>
-                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/teet.mp3" download="teet.mp3" class="text-white/20 hover:text-white transition-colors" title="Download">
+                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/teet.mp3" download class="text-white/20 hover:text-white transition-colors" title="Download">
                                             <i data-lucide="download" class="w-3.5 h-3.5"></i>
                                         </a>
                                     </div>
@@ -308,7 +313,7 @@
                                     </div>
                                     <div class="flex items-center gap-4">
                                         <span class="time-display mono text-[10px] text-white/20">00:00</span>
-                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/buffet.mp3" download="buffet.mp3" class="text-white/20 hover:text-white transition-colors" title="Download">
+                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/buffet.mp3" download class="text-white/20 hover:text-white transition-colors" title="Download">
                                             <i data-lucide="download" class="w-3.5 h-3.5"></i>
                                         </a>
                                     </div>
@@ -333,7 +338,7 @@
                                     </div>
                                     <div class="flex items-center gap-4">
                                         <span class="time-display mono text-[10px] text-white/20">00:00</span>
-                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/bwao.mp3" download="bwao.mp3" class="text-white/20 hover:text-white transition-colors" title="Download">
+                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/bwao.mp3" download class="text-white/20 hover:text-white transition-colors" title="Download">
                                             <i data-lucide="download" class="w-3.5 h-3.5"></i>
                                         </a>
                                     </div>
@@ -358,7 +363,7 @@
                                     </div>
                                     <div class="flex items-center gap-4">
                                         <span class="time-display mono text-[10px] text-white/20">00:00</span>
-                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/psytranceeee.mp3" download="psytranceeee.mp3" class="text-white/20 hover:text-white transition-colors" title="Download">
+                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/psytranceeee.mp3" download class="text-white/20 hover:text-white transition-colors" title="Download">
                                             <i data-lucide="download" class="w-3.5 h-3.5"></i>
                                         </a>
                                     </div>
@@ -383,7 +388,7 @@
                                     </div>
                                     <div class="flex items-center gap-4">
                                         <span class="time-display mono text-[10px] text-white/20">00:00</span>
-                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/parttwo.mp3" download="parttwo.mp3" class="text-white/20 hover:text-white transition-colors" title="Download">
+                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/parttwo.mp3" download class="text-white/20 hover:text-white transition-colors" title="Download">
                                             <i data-lucide="download" class="w-3.5 h-3.5"></i>
                                         </a>
                                     </div>
@@ -408,7 +413,7 @@
                                     </div>
                                     <div class="flex items-center gap-4">
                                         <span class="time-display mono text-[10px] text-white/20">00:00</span>
-                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/grahj.mp3" download="grahj.mp3" class="text-white/20 hover:text-white transition-colors" title="Download">
+                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/grahj.mp3" download class="text-white/20 hover:text-white transition-colors" title="Download">
                                             <i data-lucide="download" class="w-3.5 h-3.5"></i>
                                         </a>
                                     </div>
@@ -424,7 +429,7 @@
 
     <footer class="py-12 border-t border-white/5">
         <div class="max-w-7xl mx-auto px-6 flex justify-between">
-            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisaucin — v1.7</span>
+            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisaucin — v1.8</span>
         </div>
     </footer>
 
@@ -503,6 +508,7 @@
         }
 
         function showPage(pageId) {
+            window.scrollTo(0, 0);
             document.querySelectorAll('.page-transition').forEach(p => {
                 p.classList.toggle('active-page', p.id === `page-${pageId}`);
                 p.classList.toggle('hidden-page', p.id !== `page-${pageId}`);
