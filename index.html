@@ -203,16 +203,16 @@
 
         const TRACKS = [
             { id: 'munch', filename: 'munch.mp3', category: 'spotlight', color: 'text-yellow-400', label: '#Spotlight', purchaseUrl: PAYPAL_LINK },
-            { id: 'festive', filename: 'festive.mp3', category: 'spotlight', color: 'text-yellow-400', label: '#Spotlight', purchaseUrl: PAYPAL_LINK },
+            { id: 'dracula', filename: 'dracula.mp3', category: 'spotlight', color: 'text-yellow-400', label: '#Spotlight', purchaseUrl: PAYPAL_LINK },
             { id: 'grahj', filename: 'grahj.mp3', category: 'spotlight', color: 'text-yellow-400', label: '#Spotlight', purchaseUrl: PAYPAL_LINK },
             
             { id: 'kgaaaa', filename: 'kgaaaa.mp3', category: 'hiphop', color: 'text-red-400', label: '#HipHop_Trap', purchaseUrl: PAYPAL_LINK },
-            { id: 'festive_orig', filename: 'festive.mp3', category: 'misc', color: 'text-blue-400', label: '#Misc', purchaseUrl: PAYPAL_LINK },
+            { id: 'festive', filename: 'festive.mp3', category: 'misc', color: 'text-blue-400', label: '#Misc', purchaseUrl: PAYPAL_LINK },
             { id: 'munch_orig', filename: 'munch.mp3', category: 'misc', color: 'text-blue-400', label: '#Misc', purchaseUrl: PAYPAL_LINK },
             { id: 'reverse', filename: 'reverse.mp3', category: 'hiphop', color: 'text-red-400', label: '#HipHop_Trap', purchaseUrl: PAYPAL_LINK },
             { id: 'boom_boom', filename: 'boom_boom.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
             { id: 'donk', filename: 'donk.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse', purchaseUrl: PAYPAL_LINK },
-            { id: 'dracula', filename: 'dracula.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
+            { id: 'dracula_orig', filename: 'dracula.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
             { id: '123', filename: '123.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse', purchaseUrl: PAYPAL_LINK },
             { id: 'smartfella', filename: 'smartfella.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse', purchaseUrl: PAYPAL_LINK },
             { id: 'teet', filename: 'teet.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
@@ -300,7 +300,7 @@
             const container = document.getElementById('track-container');
             const tracks = Array.from(container.getElementsByClassName('track-item'));
             
-            // Randomize order unless it's spotlight (to maintain the 1, 2, 3 order)
+            // Randomize order unless it's spotlight (to maintain the requested order)
             if (category !== 'spotlight') {
                 for (let i = tracks.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
