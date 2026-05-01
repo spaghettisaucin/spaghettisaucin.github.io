@@ -154,7 +154,7 @@
                             <p class="mono text-[9px] uppercase text-[#FF0000] mb-1 font-bold tracking-widest">YouTube</p>
                             <p class="mono text-sm uppercase tracking-widest">spaghettisauce123</p>
                         </a>
-                        <a href="https://soundcloud.com/someproducer" target="_blank" class="glass-card p-10 flex flex-col gap-2 group">
+                        <a href="https://soundcloud.com/spaghettisauce123" target="_blank" class="glass-card p-10 flex flex-col gap-2 group">
                             <p class="mono text-[9px] uppercase text-[#FF3300] mb-1 font-bold tracking-widest">SoundCloud</p>
                             <p class="mono text-sm uppercase tracking-widest">spaghettisauce123</p>
                         </a>
@@ -188,6 +188,31 @@
                 </aside>
 
                 <div id="track-container" class="lg:w-2/3 space-y-px">
+                    <!-- Track: 123.mp3 -->
+                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="garage" data-filename="123.mp3">
+                        <div class="flex items-center gap-8">
+                            <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/123.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
+                                <i data-lucide="play" class="play-icon w-4 h-4 ml-0.5"></i>
+                                <i data-lucide="pause" class="pause-icon w-4 h-4"></i>
+                            </button>
+                            <div class="flex-grow min-w-0">
+                                <div class="flex justify-between items-start gap-4">
+                                    <div class="truncate">
+                                        <h4 class="track-title text-sm font-bold mono tracking-widest uppercase truncate">123</h4>
+                                        <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter">
+                                            <span class="text-pink-400">#GarageHouse</span>
+                                            <span>128 BPM</span>
+                                        </div>
+                                    </div>
+                                    <span class="time-display mono text-[10px] text-white/20 shrink-0">00:00</span>
+                                </div>
+                                <div class="audio-progress w-full mt-4" onclick="seek(event, this)">
+                                    <div class="audio-progress-fill"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Track: teet.mp3 -->
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="deephouse" data-filename="teet.mp3">
                         <div class="flex items-center gap-8">
@@ -464,6 +489,7 @@
                 sortTracksByDate();
                 document.querySelectorAll('.track-item').forEach(i => {
                     const cat = i.dataset.category;
+                    // Include garage in the "Newest" selection logic
                     i.style.display = (cat === 'psytrance' || cat === 'deephouse' || cat === 'garage') ? 'block' : 'none';
                 });
             } else {
