@@ -213,10 +213,11 @@
                         Categorized music. <br/> Filter by genre via nodes below.
                     </p>
                     <div class="flex flex-col gap-2">
+                        <!-- Updated Sidebar Category Order -->
                         <button onclick="filterTracks('all')" class="filter-btn active text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">00_Spotlight</button>
-                        <button onclick="filterTracks('psytrance')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">01_Psytrance</button>
-                        <button onclick="filterTracks('deephouse')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">02_Deep_House</button>
-                        <button onclick="filterTracks('garage')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">03_Garage_House</button>
+                        <button onclick="filterTracks('deephouse')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">01_Deep_House</button>
+                        <button onclick="filterTracks('garage')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">02_Garage_House</button>
+                        <button onclick="filterTracks('psytrance')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">03_Psytrance</button>
                         <button onclick="filterTracks('riddim')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">04_Riddim</button>
                         <button onclick="filterTracks('hiphop')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">05_HipHop_Trap</button>
                     </div>
@@ -579,7 +580,6 @@
         function sortTracksCustom() {
             const container = document.getElementById('track-container');
             const tracks = Array.from(container.getElementsByClassName('track-item'));
-            // Updated order: parttwo.mp3 first, psytranceeee.mp3 second
             const order = ['parttwo.mp3', 'psytranceeee.mp3', 'grahj.mp3', null, 'teet.mp3', 'smartfella.mp3', 'dracula.mp3'];
             tracks.sort((a, b) => {
                 const fileA = a.dataset.filename;
