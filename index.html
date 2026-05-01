@@ -213,7 +213,6 @@
                         Categorized music. <br/> Filter by genre via nodes below.
                     </p>
                     <div class="flex flex-col gap-2">
-                        <!-- Updated Sidebar Category Order -->
                         <button onclick="filterTracks('all')" class="filter-btn active text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">00_Spotlight</button>
                         <button onclick="filterTracks('deephouse')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">01_Deep_House</button>
                         <button onclick="filterTracks('garage')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">02_Garage_House</button>
@@ -224,6 +223,7 @@
                 </aside>
 
                 <div id="track-container" class="lg:w-2/3 space-y-px">
+                    <!-- Tracks are defined here. All tracks will be sorted via JS -->
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="hiphop" data-filename="littyabopenheimer(remix)feat-halpa.mp3">
                         <div class="flex items-center gap-6 md:gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/littyabopenheimer(remix)feat-halpa.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -234,18 +234,15 @@
                                 <div class="flex justify-between items-start gap-4">
                                     <div class="truncate">
                                         <h4 class="track-title text-sm font-bold mono tracking-widest uppercase truncate">littyabopenheimer(remix)feat-halpa</h4>
-                                        <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter">
-                                            <span class="text-red-400">#HipHop_Trap</span>
-                                        </div>
+                                        <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter"><span class="text-red-400">#HipHop_Trap</span></div>
                                     </div>
                                     <span class="time-display mono text-[10px] text-white/20 shrink-0">00:00</span>
                                 </div>
-                                <div class="audio-progress w-full mt-4" onclick="seek(event, this)">
-                                    <div class="audio-progress-fill"></div>
-                                </div>
+                                <div class="audio-progress w-full mt-4" onclick="seek(event, this)"><div class="audio-progress-fill"></div></div>
                             </div>
                         </div>
                     </div>
+
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="hiphop" data-filename="reverse.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/reverse.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -264,6 +261,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="deephouse" data-filename="dracula.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/dracula.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -282,6 +280,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="garage" data-filename="123.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/123.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -300,6 +299,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="garage" data-filename="smartfella.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/smartfella.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -318,6 +318,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="deephouse" data-filename="teet.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/teet.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -336,6 +337,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="deephouse" data-filename="buffet.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/buffet.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -354,6 +356,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="riddim" data-filename="bwao.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/bwao.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -372,6 +375,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="psytrance" data-filename="psytranceeee.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/psytranceeee.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -390,6 +394,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="psytrance" data-filename="parttwo.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/parttwo.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -408,6 +413,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="garage" data-filename="grahj.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/grahj.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -468,19 +474,14 @@
 
         function updateVolumeIcon(val) {
             const icon = document.querySelector('#mute-btn i');
-            if (val == 0) {
-                icon.setAttribute('data-lucide', 'volume-x');
-            } else if (val < 0.5) {
-                icon.setAttribute('data-lucide', 'volume-1');
-            } else {
-                icon.setAttribute('data-lucide', 'volume-2');
-            }
+            if (val == 0) icon.setAttribute('data-lucide', 'volume-x');
+            else if (val < 0.5) icon.setAttribute('data-lucide', 'volume-1');
+            else icon.setAttribute('data-lucide', 'volume-2');
             lucide.createIcons();
         }
 
         function toggleTrack(btn, file) {
             const trackItem = btn.closest('.track-item');
-
             if (currentBtn === btn) {
                 if (player.paused) {
                     player.play();
@@ -491,11 +492,7 @@
                 }
                 return;
             }
-
-            if (currentBtn) {
-                currentBtn.closest('.track-item').classList.remove('is-playing');
-            }
-
+            if (currentBtn) currentBtn.closest('.track-item').classList.remove('is-playing');
             currentBtn = btn;
             player.src = file;
             player.play();
@@ -518,16 +515,10 @@
             if (currentBtn) {
                 const currentTrackItem = currentBtn.closest('.track-item');
                 currentTrackItem.classList.remove('is-playing');
-                
-                const allVisibleTracks = Array.from(document.querySelectorAll('.track-item'))
-                    .filter(track => track.style.display !== 'none');
-                
+                const allVisibleTracks = Array.from(document.querySelectorAll('.track-item')).filter(t => t.style.display !== 'none');
                 const currentIndex = allVisibleTracks.indexOf(currentTrackItem);
-                
                 if (currentIndex !== -1 && currentIndex < allVisibleTracks.length - 1) {
-                    const nextTrack = allVisibleTracks[currentIndex + 1];
-                    const nextBtn = nextTrack.querySelector('.play-btn');
-                    nextBtn.click(); 
+                    allVisibleTracks[currentIndex + 1].querySelector('.play-btn').click(); 
                 } else {
                     currentBtn = null;
                 }
@@ -537,8 +528,7 @@
         function seek(event, el) {
             if (!currentBtn || isNaN(player.duration)) return;
             const rect = el.getBoundingClientRect();
-            const clickPos = (event.clientX - rect.left) / rect.width;
-            player.currentTime = clickPos * player.duration;
+            player.currentTime = ((event.clientX - rect.left) / rect.width) * player.duration;
         }
 
         function showPage(pageId) {
@@ -547,10 +537,14 @@
                 p.classList.toggle('hidden-page', p.id !== `page-${pageId}`);
             });
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            
             if(pageId === 'audio') filterTracks('all');
         }
 
+        /**
+         * Filter Logic
+         * 'all' (Spotlight) now includes EVERY track.
+         * The sorting for 'all' puts specific tracks first, then the remainder alphabetically.
+         */
         function filterTracks(category) {
             document.querySelectorAll('.filter-btn').forEach(b => {
                 const isActive = b.getAttribute('onclick').includes(`'${category}'`);
@@ -558,17 +552,8 @@
             });
             
             if (category === 'all') {
-                sortTracksCustom(); 
-                document.querySelectorAll('.track-item').forEach(i => {
-                    const cat = i.dataset.category;
-                    const filename = i.dataset.filename;
-                    
-                    const isSpotlightGenre = (cat === 'psytrance' || cat === 'garage');
-                    const isSpecificDeepHouse = (filename === 'teet.mp3' || filename === 'dracula.mp3');
-                    const isNotExcluded = (filename !== '123.mp3' && filename !== 'reverse.mp3');
-                    
-                    i.style.display = ((isSpotlightGenre || isSpecificDeepHouse) && isNotExcluded) ? 'block' : 'none';
-                });
+                sortTracksSpotlight(); 
+                document.querySelectorAll('.track-item').forEach(i => i.style.display = 'block');
             } else {
                 sortTracksAlphabetical(); 
                 document.querySelectorAll('.track-item').forEach(i => {
@@ -577,20 +562,41 @@
             }
         }
 
-        function sortTracksCustom() {
+        /**
+         * Spotlight Sorting Logic
+         * 1. Top picks first in explicit order.
+         * 2. Everything else follows alphabetically.
+         */
+        function sortTracksSpotlight() {
             const container = document.getElementById('track-container');
             const tracks = Array.from(container.getElementsByClassName('track-item'));
-            const order = ['parttwo.mp3', 'psytranceeee.mp3', 'grahj.mp3', null, 'teet.mp3', 'smartfella.mp3', 'dracula.mp3'];
+            const spotlightOrder = [
+                'parttwo.mp3', 
+                'psytranceeee.mp3', 
+                'grahj.mp3', 
+                'teet.mp3', 
+                'smartfella.mp3', 
+                'dracula.mp3'
+            ];
+
             tracks.sort((a, b) => {
                 const fileA = a.dataset.filename;
                 const fileB = b.dataset.filename;
-                let indexA = order.indexOf(fileA);
-                let indexB = order.indexOf(fileB);
-                if (indexA === -1) indexA = 3; 
-                if (indexB === -1) indexB = 3;
-                if (indexA !== indexB) return indexA - indexB;
+                
+                const indexA = spotlightOrder.indexOf(fileA);
+                const indexB = spotlightOrder.indexOf(fileB);
+
+                // Both in spotlight list: sort by spotlight position
+                if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+                // Only A in spotlight: A comes first
+                if (indexA !== -1) return -1;
+                // Only B in spotlight: B comes first
+                if (indexB !== -1) return 1;
+                
+                // Neither in spotlight: sort alphabetically
                 return fileA.localeCompare(fileB);
             });
+
             tracks.forEach(track => container.appendChild(track));
         }
 
@@ -601,9 +607,7 @@
             tracks.forEach(track => container.appendChild(track));
         }
 
-        window.onload = () => {
-            filterTracks('all');
-        };
+        window.onload = () => filterTracks('all');
     </script>
 </body>
 </html>
