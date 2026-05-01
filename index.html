@@ -267,11 +267,11 @@
 
     <footer class="py-12 px-6 border-t border-white/5">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v9.0</span>
+            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v10.0</span>
         </div>
     </footer>
 
-    <audio id="global-player" preload="auto"></audio>
+    <audio id="global-player"></audio>
 
     <script>
         lucide.createIcons();
@@ -279,6 +279,7 @@
         const player = document.getElementById('global-player');
         const debugLog = document.getElementById('debug-log');
         let currentBtn = null;
+        let blobUrl = null;
 
         function log(msg) {
             const time = new Date().toLocaleTimeString().split(' ')[0];
@@ -308,31 +309,40 @@
             }
 
             currentBtn = btn;
-            log(`INIT: ${file}`);
+            log(`FETCHING: ${file}`);
             
-            // Clean slate
             player.pause();
-            player.src = "";
-            player.load();
-            
-            // Set source
-            player.src = file;
-            player.volume = 1.0;
-            
-            // Wait for metadata to know length
-            player.onloadedmetadata = async () => {
-                log(`META OK: ${Math.round(player.duration)}s`);
-                try {
-                    await player.play();
-                    trackItem.classList.add('is-playing');
-                } catch (e) {
-                    log(`PLAY REJECTED: ${e.message}`);
-                    trackItem.classList.add('is-error');
-                }
-            };
+            if (blobUrl) {
+                URL.revokeObjectURL(blobUrl);
+                blobUrl = null;
+            }
 
-            player.onstalled = () => log("STALLED: Network lag");
-            player.onwaiting = () => log("WAITING: Buffering...");
+            try {
+                // FORCE FULL DOWNLOAD: This fixes the "2s duration" issue by bypassing range requests
+                const response = await fetch(file);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const blob = await response.blob();
+                blobUrl = URL.createObjectURL(blob);
+                
+                player.src = blobUrl;
+                player.load();
+                
+                player.oncanplay = async () => {
+                    log(`SYNC OK: ${Math.round(player.duration)}s`);
+                    try {
+                        await player.play();
+                        trackItem.classList.add('is-playing');
+                    } catch (e) {
+                        log(`PLAY REJECTED: ${e.message}`);
+                        trackItem.classList.add('is-error');
+                    }
+                    player.oncanplay = null;
+                };
+            } catch (err) {
+                log(`FETCH ERR: ${err.message}`);
+                trackItem.classList.add('is-error');
+            }
         }
 
         player.onerror = () => {
