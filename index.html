@@ -211,7 +211,7 @@
                 </aside>
 
                 <div id="track-container" class="lg:w-2/3 space-y-px">
-                    <!-- Updated Track 1 -->
+                    <!-- Track 1: psytranceeee.mp3 -->
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="psytrance" data-file="psytranceeee.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'psytranceeee.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -237,7 +237,7 @@
                         </div>
                     </div>
 
-                    <!-- Updated Track 2 -->
+                    <!-- Track 2: parttwo.mp3 -->
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="psytrance" data-file="parttwo.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'parttwo.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -263,7 +263,7 @@
                         </div>
                     </div>
 
-                    <!-- Placeholder Track -->
+                    <!-- Locked Track Example -->
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="hiphop">
                         <div class="flex items-center gap-8 opacity-40">
                             <button class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center cursor-not-allowed">
@@ -272,7 +272,7 @@
                             <div class="flex-grow min-w-0">
                                 <div class="flex justify-between items-start gap-4">
                                     <div class="truncate">
-                                        <h4 class="text-sm font-bold mono tracking-widest uppercase truncate">Concrete_Dreams_Boom</h4>
+                                        <h4 class="text-sm font-bold mono tracking-widest uppercase truncate">Concrete_Dreams</h4>
                                         <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter">
                                             <span class="text-amber-400">#HipHop</span>
                                             <span>92 BPM</span>
@@ -314,13 +314,16 @@
         const player = document.getElementById('global-player');
         let currentBtn = null;
 
+        /**
+         * Enhanced toggle function to handle browser play policies
+         */
         function toggleTrack(btn, file) {
             const trackItem = btn.closest('.track-item');
             
-            // If same track, toggle play/pause
+            // 1. If clicking the same track
             if (currentBtn === btn) {
                 if (player.paused) {
-                    player.play();
+                    player.play().catch(e => console.error("Playback error:", e));
                     trackItem.classList.add('is-playing');
                 } else {
                     player.pause();
@@ -329,17 +332,29 @@
                 return;
             }
 
-            // If different track, reset previous
+            // 2. If changing tracks, reset the old UI
             if (currentBtn) {
-                currentBtn.closest('.track-item').classList.remove('is-playing');
-                currentBtn.closest('.track-item').querySelector('.audio-progress-fill').style.width = '0%';
+                const prevItem = currentBtn.closest('.track-item');
+                prevItem.classList.remove('is-playing');
+                prevItem.querySelector('.audio-progress-fill').style.width = '0%';
+                prevItem.querySelector('.time-display').innerText = '00:00';
             }
 
-            // Setup new track
+            // 3. Load and Play the new track
             currentBtn = btn;
             player.src = file;
-            player.play().catch(e => console.error("Playback failed. Ensure files exist in root directory.", e));
-            trackItem.classList.add('is-playing');
+            player.load(); // Explicitly load the source
+            
+            player.play()
+                .then(() => {
+                    trackItem.classList.add('is-playing');
+                })
+                .catch(e => {
+                    console.error("Audio file not found or browser blocked play:", e);
+                    // Reset UI on failure
+                    trackItem.classList.remove('is-playing');
+                    currentBtn = null;
+                });
         }
 
         player.ontimeupdate = () => {
@@ -348,13 +363,15 @@
             const progressFill = trackItem.querySelector('.audio-progress-fill');
             const timeDisplay = trackItem.querySelector('.time-display');
             
-            const percent = (player.currentTime / player.duration) * 100;
-            progressFill.style.width = `${percent}%`;
+            if (player.duration) {
+                const percent = (player.currentTime / player.duration) * 100;
+                progressFill.style.width = `${percent}%`;
 
-            // Format time
-            const mins = Math.floor(player.currentTime / 60);
-            const secs = Math.floor(player.currentTime % 60).toString().padStart(2, '0');
-            timeDisplay.innerText = `${mins}:${secs}`;
+                // Format time
+                const mins = Math.floor(player.currentTime / 60);
+                const secs = Math.floor(player.currentTime % 60).toString().padStart(2, '0');
+                timeDisplay.innerText = `${mins}:${secs}`;
+            }
         };
 
         player.onended = () => {
@@ -365,7 +382,7 @@
         };
 
         function seek(event, el) {
-            if (!currentBtn || !player.src) return;
+            if (!currentBtn || !player.src || !player.duration) return;
             const rect = el.getBoundingClientRect();
             const x = event.clientX - rect.left;
             const percent = x / rect.width;
