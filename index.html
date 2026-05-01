@@ -184,10 +184,36 @@
                         <button onclick="filterTracks('deephouse')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">02_Deep_House</button>
                         <button onclick="filterTracks('garage')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">03_Garage_House</button>
                         <button onclick="filterTracks('riddim')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">04_Riddim</button>
+                        <button onclick="filterTracks('hiphop')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">05_HipHop_Trap</button>
                     </div>
                 </aside>
 
                 <div id="track-container" class="lg:w-2/3 space-y-px">
+                    <!-- Track: reverse.mp3 -->
+                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="hiphop" data-filename="reverse.mp3">
+                        <div class="flex items-center gap-8">
+                            <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/reverse.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
+                                <i data-lucide="play" class="play-icon w-4 h-4 ml-0.5"></i>
+                                <i data-lucide="pause" class="pause-icon w-4 h-4"></i>
+                            </button>
+                            <div class="flex-grow min-w-0">
+                                <div class="flex justify-between items-start gap-4">
+                                    <div class="truncate">
+                                        <h4 class="track-title text-sm font-bold mono tracking-widest uppercase truncate">reverse</h4>
+                                        <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter">
+                                            <span class="text-red-400">#HipHop_Trap</span>
+                                            <span>N/A BPM</span>
+                                        </div>
+                                    </div>
+                                    <span class="time-display mono text-[10px] text-white/20 shrink-0">00:00</span>
+                                </div>
+                                <div class="audio-progress w-full mt-4" onclick="seek(event, this)">
+                                    <div class="audio-progress-fill"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Track: dracula.mp3 -->
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="deephouse" data-filename="dracula.mp3">
                         <div class="flex items-center gap-8">
@@ -514,7 +540,8 @@
                 sortTracksByDate();
                 document.querySelectorAll('.track-item').forEach(i => {
                     const cat = i.dataset.category;
-                    i.style.display = (cat === 'psytrance' || cat === 'deephouse' || cat === 'garage') ? 'block' : 'none';
+                    // Include the new category in newest
+                    i.style.display = (cat === 'psytrance' || cat === 'deephouse' || cat === 'garage' || cat === 'hiphop') ? 'block' : 'none';
                 });
             } else {
                 if (category === 'psytrance') {
@@ -530,12 +557,13 @@
             const container = document.getElementById('track-container');
             const tracks = Array.from(container.getElementsByClassName('track-item'));
             
-            // Priority sort for specific newest files, then alphabetical
             tracks.sort((a, b) => {
                 const fileA = a.dataset.filename;
                 const fileB = b.dataset.filename;
                 
-                // Keep Dracula and 123 at the top
+                // Priority sort for specific newest files
+                if (fileA === 'reverse.mp3') return -1;
+                if (fileB === 'reverse.mp3') return 1;
                 if (fileA === 'dracula.mp3') return -1;
                 if (fileB === 'dracula.mp3') return 1;
                 if (fileA === '123.mp3') return -1;
