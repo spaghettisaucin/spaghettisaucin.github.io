@@ -189,7 +189,7 @@
                 </aside>
 
                 <div id="track-container" class="lg:w-2/3 space-y-px">
-                    <!-- Tracks -->
+                    <!-- Track Entries -->
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="hiphop" data-filename="littyabopenheimer(remix)feat-halpa.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/littyabopenheimer(remix)feat-halpa.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -576,48 +576,40 @@
             });
             
             if (category === 'all') {
-                sortTracksRandomly();
+                sortTracksCustom(); // Use fixed ordering
                 document.querySelectorAll('.track-item').forEach(i => {
                     const cat = i.dataset.category;
                     const filename = i.dataset.filename;
                     
-                    // Spotlight logic: Psytrance, Garage House, and specific Deep House tracks
                     const isSpotlightGenre = (cat === 'psytrance' || cat === 'garage');
                     const isSpecificDeepHouse = (filename === 'teet.mp3' || filename === 'dracula.mp3');
-                    
-                    // Exclusion logic: exclude 123.mp3
                     const isNotExcluded = (filename !== '123.mp3');
                     
                     i.style.display = ((isSpotlightGenre || isSpecificDeepHouse) && isNotExcluded) ? 'block' : 'none';
                 });
             } else {
-                if (category === 'psytrance') {
-                    sortPsytranceCustom();
-                }
+                sortTracksAlphabetical(); // Default for specific folders
                 document.querySelectorAll('.track-item').forEach(i => {
                     i.style.display = (i.dataset.category === category) ? 'block' : 'none';
                 });
             }
         }
 
-        function sortTracksRandomly() {
+        function sortTracksCustom() {
             const container = document.getElementById('track-container');
             const tracks = Array.from(container.getElementsByClassName('track-item'));
             
-            for (let i = tracks.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
-            }
-            
-            tracks.forEach(track => container.appendChild(track));
-        }
+            // Fixed sequence for Spotlight
+            const order = [
+                'psytranceeee.mp3', // 1st
+                'parttwo.mp3',      // 2nd
+                'grahj.mp3',        // 3rd
+                null,               // 4th placeholder (other tracks fall here)
+                'teet.mp3',         // 5th
+                'smartfella.mp3',   // 6th
+                'dracula.mp3'       // 7th
+            ];
 
-        function sortPsytranceCustom() {
-            const container = document.getElementById('track-container');
-            const tracks = Array.from(container.getElementsByClassName('track-item'));
-            
-            const order = ['psytranceeee.mp3', 'parttwo.mp3'];
-            
             tracks.sort((a, b) => {
                 const fileA = a.dataset.filename;
                 const fileB = b.dataset.filename;
@@ -625,17 +617,26 @@
                 let indexA = order.indexOf(fileA);
                 let indexB = order.indexOf(fileB);
                 
-                if (indexA !== -1 && indexB !== -1) return indexA - indexB;
-                if (indexA !== -1) return -1;
-                if (indexB !== -1) return 1;
+                // If track is not in specified list, treat it as a middle-tier track
+                if (indexA === -1) indexA = 3; 
+                if (indexB === -1) indexB = 3;
+
+                if (indexA !== indexB) return indexA - indexB;
                 return fileA.localeCompare(fileB);
             });
             
             tracks.forEach(track => container.appendChild(track));
         }
 
+        function sortTracksAlphabetical() {
+            const container = document.getElementById('track-container');
+            const tracks = Array.from(container.getElementsByClassName('track-item'));
+            tracks.sort((a, b) => a.dataset.filename.localeCompare(b.dataset.filename));
+            tracks.forEach(track => container.appendChild(track));
+        }
+
         window.onload = () => {
-            sortTracksRandomly();
+            filterTracks('all');
         };
     </script>
 </body>
