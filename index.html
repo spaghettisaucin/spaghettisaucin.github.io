@@ -185,7 +185,7 @@
 
     <footer class="py-12 border-t border-white/5">
         <div class="max-w-7xl mx-auto px-6 flex justify-center items-center">
-            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisaucin — v2.4</span>
+            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisaucin — v3.2</span>
         </div>
     </footer>
 
@@ -193,21 +193,24 @@
 
     <!-- UI & Audio Player Logic -->
     <script>
+        // Here we use the direct PayPal hosted button link for a seamless layout
+        const PAYPAL_LINK = 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GUT5AGMMRENUU';
+
         const TRACKS = [
-            { id: 'kgaaaa', filename: 'kgaaaa.mp3', category: 'hiphop', color: 'text-red-400', label: '#HipHop_Trap' },
-            { id: 'festive', filename: 'festive.mp3', category: 'misc', color: 'text-blue-400', label: '#Misc' },
-            { id: 'munch', filename: 'munch.mp3', category: 'misc', color: 'text-blue-400', label: '#Misc' },
-            { id: 'reverse', filename: 'reverse.mp3', category: 'hiphop', color: 'text-red-400', label: '#HipHop_Trap' },
-            { id: 'boom_boom', filename: 'boom_boom.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse' },
-            { id: 'donk', filename: 'donk.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse' },
-            { id: 'dracula', filename: 'dracula.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse' },
-            { id: '123', filename: '123.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse' },
-            { id: 'smartfella', filename: 'smartfella.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse' },
-            { id: 'teet', filename: 'teet.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse' },
-            { id: 'buffet', filename: 'buffet.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse' },
-            { id: 'psytranceeee', filename: 'psytranceeee.mp3', category: 'psytrance', color: 'text-indigo-400', label: '#Psytrance' },
-            { id: 'parttwo', filename: 'parttwo.mp3', category: 'psytrance', color: 'text-indigo-400', label: '#Psytrance' },
-            { id: 'grahj', filename: 'grahj.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse' }
+            { id: 'kgaaaa', filename: 'kgaaaa.mp3', category: 'hiphop', color: 'text-red-400', label: '#HipHop_Trap', purchaseUrl: PAYPAL_LINK },
+            { id: 'festive', filename: 'festive.mp3', category: 'misc', color: 'text-blue-400', label: '#Misc', purchaseUrl: PAYPAL_LINK },
+            { id: 'munch', filename: 'munch.mp3', category: 'misc', color: 'text-blue-400', label: '#Misc', purchaseUrl: PAYPAL_LINK },
+            { id: 'reverse', filename: 'reverse.mp3', category: 'hiphop', color: 'text-red-400', label: '#HipHop_Trap', purchaseUrl: PAYPAL_LINK },
+            { id: 'boom_boom', filename: 'boom_boom.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
+            { id: 'donk', filename: 'donk.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse', purchaseUrl: PAYPAL_LINK },
+            { id: 'dracula', filename: 'dracula.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
+            { id: '123', filename: '123.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse', purchaseUrl: PAYPAL_LINK },
+            { id: 'smartfella', filename: 'smartfella.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse', purchaseUrl: PAYPAL_LINK },
+            { id: 'teet', filename: 'teet.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
+            { id: 'buffet', filename: 'buffet.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
+            { id: 'psytranceeee', filename: 'psytranceeee.mp3', category: 'psytrance', color: 'text-indigo-400', label: '#Psytrance', purchaseUrl: PAYPAL_LINK },
+            { id: 'parttwo', filename: 'parttwo.mp3', category: 'psytrance', color: 'text-indigo-400', label: '#Psytrance', purchaseUrl: PAYPAL_LINK },
+            { id: 'grahj', filename: 'grahj.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse', purchaseUrl: PAYPAL_LINK }
         ];
 
         const SPOTLIGHT_ORDER = ['kgaaaa.mp3', 'festive.mp3', 'munch.mp3', '123.mp3', 'parttwo.mp3', 'psytranceeee.mp3', 'grahj.mp3', 'teet.mp3', 'smartfella.mp3', 'dracula.mp3', 'donk.mp3', 'boom_boom.mp3'];
@@ -240,9 +243,13 @@
                                     </div>
                                     <div class="flex items-center gap-4">
                                         <span class="time-display mono text-[10px] text-white/20">00:00</span>
-                                        <a href="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/${track.filename}" download class="text-white/20 hover:text-white transition-colors">
-                                            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                        
+                                        <!-- Clean Direct PayPal Link Button -->
+                                        <a href="${track.purchaseUrl}" target="_blank" class="shrink-0 flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 hover:bg-white hover:text-black transition-all rounded-sm">
+                                            <span class="mono text-[8px] uppercase tracking-tighter font-bold">Buy_$5</span>
+                                            <i data-lucide="credit-card" class="w-3 h-3"></i>
                                         </a>
+
                                     </div>
                                 </div>
                                 <div class="audio-progress w-full mt-4" onclick="seek(event, this)">
@@ -289,6 +296,7 @@
             const container = document.getElementById('track-container');
             const tracks = Array.from(container.getElementsByClassName('track-item'));
             const isSpotlight = (category === 'all');
+            
             if (isSpotlight) {
                 tracks.sort((a, b) => {
                     const idxA = SPOTLIGHT_ORDER.indexOf(a.dataset.filename);
@@ -304,6 +312,7 @@
                     [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
                 }
             }
+
             tracks.forEach(track => {
                 container.appendChild(track);
                 const match = isSpotlight || track.dataset.category === category;
