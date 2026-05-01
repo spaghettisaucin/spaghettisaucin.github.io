@@ -85,8 +85,8 @@
         }
 
         .hero-image-nav {
-            width: 48px;
-            height: 48px;
+            width: 42px;
+            height: 42px;
             object-fit: cover;
             filter: contrast(1.05);
             border: 1px solid rgba(255,255,255,0.1);
@@ -137,28 +137,28 @@
     <div class="scanline"></div>
 
     <nav class="fixed top-0 w-full z-50 border-b border-white/5 bg-black/95 backdrop-blur-md">
-        <div class="max-w-7xl mx-auto px-4 md:px-6 py-4 md:h-24 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 py-4 md:h-24 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-4">
             <!-- Logo Area -->
-            <div class="flex items-center gap-4 cursor-pointer w-full md:w-auto" onclick="showPage('home')">
+            <div class="flex items-center gap-3 md:gap-4 cursor-pointer w-full md:w-auto" onclick="showPage('home')">
                 <img src="https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/Bingo.jpg" alt="Profile Visual" class="hero-image-nav rounded-sm" onerror="this.style.display='none';">
                 <div class="flex flex-col">
-                    <span class="text-lg md:text-2xl font-bold tracking-tighter mono uppercase italic leading-none">spaghettisaucin</span>
+                    <span class="text-base md:text-2xl font-bold tracking-tighter mono uppercase italic leading-none">spaghettisaucin</span>
                     <span class="text-[8px] md:text-[10px] mono uppercase tracking-[0.4em] text-white/30 mt-1">DJ / Producer</span>
                 </div>
             </div>
 
             <!-- Controls & Nav -->
-            <div class="flex items-center justify-between md:justify-end gap-6 md:gap-10 w-full md:w-auto">
+            <div class="flex items-center justify-between md:justify-end gap-4 md:gap-10 w-full md:w-auto">
                 <!-- Master Volume Control -->
                 <div class="flex items-center gap-3 bg-white/5 px-3 py-2 rounded-full border border-white/10">
                     <button onclick="toggleMute()" id="mute-btn" class="text-white/40 hover:text-white transition-colors">
-                        <i data-lucide="volume-2" class="w-4 h-4"></i>
+                        <i data-lucide="volume-2" class="w-3.5 h-3.5 md:w-4 md:h-4"></i>
                     </button>
                     <input type="range" id="master-volume" min="0" max="1" step="0.01" value="0.8" 
-                           class="w-20 md:w-24 cursor-pointer accent-white" oninput="updateVolume(this.value)">
+                           class="w-16 md:w-24 cursor-pointer accent-white" oninput="updateVolume(this.value)">
                 </div>
 
-                <div class="flex gap-6 md:gap-10 text-[9px] md:text-[10px] mono uppercase tracking-[0.2em] text-white/40">
+                <div class="flex gap-4 md:gap-10 text-[9px] md:text-[10px] mono uppercase tracking-[0.2em] text-white/40">
                     <button onclick="showPage('audio')" class="nav-link hover:text-white transition-colors">Archive</button>
                     <button onclick="showPage('home')" class="nav-link hover:text-white transition-colors">Root</button>
                 </div>
@@ -166,8 +166,7 @@
         </div>
     </nav>
 
-    <!-- Increased padding-top for the responsive nav height -->
-    <main class="pt-36 md:pt-24">
+    <main class="pt-40 md:pt-24">
         <!-- HOME PAGE -->
         <div id="page-home" class="page-transition active-page">
             <section class="min-h-[60vh] flex flex-col justify-center px-6 max-w-7xl mx-auto py-20">
@@ -229,7 +228,6 @@
                 </aside>
 
                 <div id="track-container" class="lg:w-2/3 space-y-px">
-                    <!-- Standard track structure for the 12 files -->
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="hiphop" data-filename="littyabopenheimer(remix)feat-halpa.mp3">
                         <div class="flex items-center gap-6 md:gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/littyabopenheimer(remix)feat-halpa.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -252,7 +250,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- The rest of the tracks follow this pattern -->
+                    <!-- Added reverse.mp3 here -->
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="hiphop" data-filename="reverse.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/reverse.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -361,24 +359,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="riddim" data-filename="waytodothings.mp3">
-                        <div class="flex items-center gap-8">
-                            <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/waytodothings.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
-                                <i data-lucide="play" class="play-icon w-4 h-4 ml-0.5"></i>
-                                <i data-lucide="pause" class="pause-icon w-4 h-4"></i>
-                            </button>
-                            <div class="flex-grow min-w-0">
-                                <div class="flex justify-between items-start gap-4">
-                                    <div class="truncate">
-                                        <h4 class="track-title text-sm font-bold mono tracking-widest uppercase truncate">waytodothings</h4>
-                                        <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter"><span class="text-yellow-500">#Riddim</span></div>
-                                    </div>
-                                    <span class="time-display mono text-[10px] text-white/20 shrink-0">00:00</span>
-                                </div>
-                                <div class="audio-progress w-full mt-4" onclick="seek(event, this)"><div class="audio-progress-fill"></div></div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="riddim" data-filename="bwao.mp3">
                         <div class="flex items-center gap-8">
                             <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/bwao.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
@@ -458,7 +438,7 @@
 
     <footer class="py-12 px-6 border-t border-white/5">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisaucin — System v1.4</span>
+            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisaucin — System v1.5</span>
         </div>
     </footer>
 
@@ -590,7 +570,8 @@
                     
                     const isSpotlightGenre = (cat === 'psytrance' || cat === 'garage');
                     const isSpecificDeepHouse = (filename === 'teet.mp3' || filename === 'dracula.mp3');
-                    const isNotExcluded = (filename !== '123.mp3');
+                    // Excluded reverse.mp3 from spotlight
+                    const isNotExcluded = (filename !== '123.mp3' && filename !== 'reverse.mp3');
                     
                     i.style.display = ((isSpotlightGenre || isSpecificDeepHouse) && isNotExcluded) ? 'block' : 'none';
                 });
