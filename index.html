@@ -179,10 +179,9 @@
                         Categorized music. <br/> Filter by genre via nodes below.
                     </p>
                     <div class="flex flex-col gap-2">
-                        <button onclick="filterTracks('all')" class="filter-btn active text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">00_All_Files</button>
+                        <button onclick="filterTracks('all')" class="filter-btn active text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">00_Newest</button>
                         <button onclick="filterTracks('psytrance')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">01_Psytrance</button>
-                        <button onclick="filterTracks('riddim')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">02_Riddim</button>
-                        <button onclick="filterTracks('deephouse')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">03_Deep_House</button>
+                        <button onclick="filterTracks('deephouse')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">02_Deep_House</button>
                     </div>
                 </aside>
 
@@ -201,56 +200,6 @@
                                         <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter">
                                             <span class="text-emerald-400">#DeepHouse</span>
                                             <span>122 BPM</span>
-                                        </div>
-                                    </div>
-                                    <span class="time-display mono text-[10px] text-white/20 shrink-0">00:00</span>
-                                </div>
-                                <div class="audio-progress w-full mt-4" onclick="seek(event, this)">
-                                    <div class="audio-progress-fill"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Track: waytodothings.mp3 -->
-                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="riddim" data-filename="waytodothings.mp3">
-                        <div class="flex items-center gap-8">
-                            <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/waytodothings.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
-                                <i data-lucide="play" class="play-icon w-4 h-4 ml-0.5"></i>
-                                <i data-lucide="pause" class="pause-icon w-4 h-4"></i>
-                            </button>
-                            <div class="flex-grow min-w-0">
-                                <div class="flex justify-between items-start gap-4">
-                                    <div class="truncate">
-                                        <h4 class="track-title text-sm font-bold mono tracking-widest uppercase truncate">waytodothings</h4>
-                                        <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter">
-                                            <span class="text-yellow-500">#Riddim</span>
-                                            <span>140 BPM</span>
-                                        </div>
-                                    </div>
-                                    <span class="time-display mono text-[10px] text-white/20 shrink-0">00:00</span>
-                                </div>
-                                <div class="audio-progress w-full mt-4" onclick="seek(event, this)">
-                                    <div class="audio-progress-fill"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Track: bwao.mp3 -->
-                    <div class="track-item group border-b border-white/5 hover:bg-white/[0.02] transition-colors py-8 px-4" data-category="riddim" data-filename="bwao.mp3">
-                        <div class="flex items-center gap-8">
-                            <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/bwao.mp3')" class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-all shrink-0">
-                                <i data-lucide="play" class="play-icon w-4 h-4 ml-0.5"></i>
-                                <i data-lucide="pause" class="pause-icon w-4 h-4"></i>
-                            </button>
-                            <div class="flex-grow min-w-0">
-                                <div class="flex justify-between items-start gap-4">
-                                    <div class="truncate">
-                                        <h4 class="track-title text-sm font-bold mono tracking-widest uppercase truncate">bwao</h4>
-                                        <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter">
-                                            <span class="text-yellow-500">#Riddim</span>
-                                            <span>140 BPM</span>
                                         </div>
                                     </div>
                                     <span class="time-display mono text-[10px] text-white/20 shrink-0">00:00</span>
@@ -385,7 +334,7 @@
             });
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // Default to alphabetical when entering audio page
+            // Default to newest view when entering audio page
             if(pageId === 'audio') filterTracks('all');
         }
 
@@ -396,7 +345,8 @@
             });
             
             if (category === 'all') {
-                sortTracksAlphabetically();
+                // In this case, "all" acts as the "Newest" filter
+                sortTracksByDate(); 
             } else if (category === 'psytrance') {
                 sortPsytranceCustom();
             }
@@ -406,10 +356,13 @@
             });
         }
 
-        function sortTracksAlphabetically() {
+        // Renamed and updated sorting logic
+        function sortTracksByDate() {
             const container = document.getElementById('track-container');
             const tracks = Array.from(container.getElementsByClassName('track-item'));
             
+            // Defaulting to the existing order for "Newest" (as they are hardcoded in a specific sequence)
+            // But maintaining alphabetical logic for general consistency if needed later
             tracks.sort((a, b) => {
                 const titleA = a.querySelector('.track-title').innerText.toLowerCase();
                 const titleB = b.querySelector('.track-title').innerText.toLowerCase();
@@ -423,7 +376,6 @@
             const container = document.getElementById('track-container');
             const tracks = Array.from(container.getElementsByClassName('track-item'));
             
-            // Define custom order for Psytrance
             const order = ['psytranceeee.mp3', 'parttwo.mp3'];
             
             tracks.sort((a, b) => {
@@ -433,22 +385,17 @@
                 let indexA = order.indexOf(fileA);
                 let indexB = order.indexOf(fileB);
                 
-                // If both are in our custom order list
                 if (indexA !== -1 && indexB !== -1) return indexA - indexB;
-                // If only A is in the list, it comes first
                 if (indexA !== -1) return -1;
-                // If only B is in the list, it comes first
                 if (indexB !== -1) return 1;
-                // Otherwise alphabetical for any others
                 return fileA.localeCompare(fileB);
             });
             
             tracks.forEach(track => container.appendChild(track));
         }
 
-        // Run sort on initial load
         window.onload = () => {
-            sortTracksAlphabetically();
+            sortTracksByDate();
         };
     </script>
 </body>
