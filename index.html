@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>spaghettisauce123</title>
+    <title>spaghettisaucin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -101,25 +101,6 @@
         .is-playing .pause-icon { display: block; }
         .pause-icon { display: none; }
 
-        .is-error .play-btn { border-color: #ef4444 !important; color: #ef4444 !important; animation: shake 0.5s ease; }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-4px); }
-            75% { transform: translateX(4px); }
-        }
-
-        #debug-log {
-            font-family: 'Space Mono', monospace;
-            font-size: 8px;
-            color: rgba(255,255,255,0.4);
-            padding: 10px;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.05);
-            max-height: 100px;
-            overflow-y: auto;
-        }
-
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: #000; }
         ::-webkit-scrollbar-thumb { background: #222; }
@@ -204,10 +185,6 @@
                         <button onclick="filterTracks('all')" class="filter-btn active text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">00_All_Files</button>
                         <button onclick="filterTracks('psytrance')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">01_Psytrance</button>
                     </div>
-                    <div id="debug-container" class="mt-8">
-                        <p class="mono text-[7px] text-white/20 uppercase mb-2">Internal_System_Log</p>
-                        <div id="debug-log">Ready...</div>
-                    </div>
                 </aside>
 
                 <div id="track-container" class="lg:w-2/3 space-y-px">
@@ -267,7 +244,7 @@
 
     <footer class="py-12 px-6 border-t border-white/5">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisaucin — System v11.2</span>
+            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisaucin — System v12.0</span>
         </div>
     </footer>
 
@@ -277,26 +254,15 @@
         lucide.createIcons();
 
         const player = document.getElementById('global-player');
-        const debugLog = document.getElementById('debug-log');
         let currentBtn = null;
-        let blobUrl = null;
 
-        function log(msg) {
-            const time = new Date().toLocaleTimeString().split(' ')[0];
-            debugLog.innerHTML = `[${time}] ${msg}<br>` + debugLog.innerHTML;
-            console.log(`[${time}] ${msg}`);
-        }
-
-        async function toggleTrack(btn, file) {
+        function toggleTrack(btn, file) {
             const trackItem = btn.closest('.track-item');
-            trackItem.classList.remove('is-error');
 
             if (currentBtn === btn) {
                 if (player.paused) {
-                    try {
-                        await player.play();
-                        trackItem.classList.add('is-playing');
-                    } catch (e) { log(`Resume Err: ${e.message}`); }
+                    player.play();
+                    trackItem.classList.add('is-playing');
                 } else {
                     player.pause();
                     trackItem.classList.remove('is-playing');
@@ -305,56 +271,14 @@
             }
 
             if (currentBtn) {
-                currentBtn.closest('.track-item').classList.remove('is-playing', 'is-error');
+                currentBtn.closest('.track-item').classList.remove('is-playing');
             }
 
             currentBtn = btn;
-            const fileName = file.split('/').pop();
-            log(`FETCHING: ${fileName}`);
-            
-            player.pause();
-            if (blobUrl) {
-                URL.revokeObjectURL(blobUrl);
-                blobUrl = null;
-            }
-
-            try {
-                // Fetch blob to ensure the browser handles the file correctly from GitHub
-                const response = await fetch(file);
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                
-                const blob = await response.blob();
-                blobUrl = URL.createObjectURL(blob);
-                
-                player.src = blobUrl;
-                player.load();
-                
-                player.oncanplay = async () => {
-                    log(`SYNC OK: ${Math.round(player.duration)}s`);
-                    try {
-                        await player.play();
-                        trackItem.classList.add('is-playing');
-                    } catch (e) {
-                        log(`PLAY REJECTED: ${e.message}`);
-                        trackItem.classList.add('is-error');
-                    }
-                    player.oncanplay = null;
-                };
-            } catch (err) {
-                log(`FETCH ERR: ${err.message}`);
-                trackItem.classList.add('is-error');
-            }
+            player.src = file;
+            player.play();
+            trackItem.classList.add('is-playing');
         }
-
-        player.onerror = () => {
-            const codes = ["None", "Aborted", "Network", "Decode", "Src Not Supported"];
-            const code = player.error ? player.error.code : 0;
-            log(`CRITICAL: ${codes[code]}`);
-            if (currentBtn) {
-                currentBtn.closest('.track-item').classList.add('is-error');
-                currentBtn.closest('.track-item').classList.remove('is-playing');
-            }
-        };
 
         player.ontimeupdate = () => {
             if (!currentBtn || isNaN(player.duration)) return;
