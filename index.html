@@ -151,7 +151,7 @@
             <section class="min-h-[60vh] flex flex-col justify-center px-6 max-w-7xl mx-auto py-20">
                 <div class="w-full">
                     <p class="text-white/40 mono text-xs uppercase tracking-widest leading-relaxed mb-12">
-                        Electronic Dance Music
+                        Music
                     </p>
                     <button onclick="showPage('audio')" class="group flex items-center justify-between w-full border border-white/20 px-12 py-10 hover:bg-white hover:text-black transition-all duration-500">
                         <span class="mono text-[14px] font-bold tracking-[0.6em] uppercase">Enter_Audio_Archive</span>
@@ -267,12 +267,11 @@
 
     <footer class="py-12 px-6 border-t border-white/5">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v7.0</span>
+            <span class="mono text-[8px] text-white/20 uppercase tracking-[0.4em]">spaghettisauce123 — System v8.1</span>
         </div>
     </footer>
 
-    <!-- Global player with crossOrigin and no preload to prevent silent buffering -->
-    <audio id="global-player" crossorigin="anonymous"></audio>
+    <audio id="global-player" preload="metadata"></audio>
 
     <script>
         lucide.createIcons();
@@ -291,64 +290,51 @@
             const trackItem = btn.closest('.track-item');
             trackItem.classList.remove('is-error');
 
-            // 1. Same button: Toggle Pause/Play
             if (currentBtn === btn) {
                 if (player.paused) {
                     try {
                         await player.play();
                         trackItem.classList.add('is-playing');
-                        log("Resumed playback.");
-                    } catch (e) {
-                        log(`Resume failed: ${e.message}`);
-                    }
+                    } catch (e) { log(`Resume Err: ${e.message}`); }
                 } else {
                     player.pause();
                     trackItem.classList.remove('is-playing');
-                    log("Paused playback.");
                 }
                 return;
             }
 
-            // 2. New track: Reset and Force Load
             if (currentBtn) {
                 currentBtn.closest('.track-item').classList.remove('is-playing', 'is-error');
             }
 
             currentBtn = btn;
-            log(`Loading: ./${file}`);
             
-            // Critical Fix for Silent Buffer:
-            // Completely reset the element and force a fresh fetch
+            // Cache busting: GitHub Pages can be aggressive with caching 404s or empty partials
+            const cacheBuster = `?t=${Date.now()}`;
+            const finalPath = `./${file}${cacheBuster}`;
+            
+            log(`Fecthing: ${file}`);
+            
             player.pause();
-            player.removeAttribute('src'); 
+            player.src = finalPath;
             player.load();
-            
-            // Reinject source
-            player.src = file;
-            player.muted = false;
-            player.volume = 1.0;
 
-            // Use 'loadeddata' to ensure at least the first frame/buffer chunk is here
-            player.onloadeddata = async () => {
+            // Explicitly wait for duration change to confirm we have a real file
+            player.ondurationchange = async () => {
                 try {
+                    log(`Buffer OK: ${Math.round(player.duration)}s`);
                     await player.play();
-                    log(`STREAM START: ${file}`);
                     trackItem.classList.add('is-playing');
-                } catch (playErr) {
-                    log(`PLAY ERROR: ${playErr.message}`);
+                } catch (err) {
+                    log(`Play Rejected: ${err.message}`);
                     trackItem.classList.add('is-error');
                 }
-                player.onloadeddata = null; // Clean up listener
+                player.ondurationchange = null;
             };
-
-            // Start the loading process
-            player.load();
         }
 
         player.onerror = () => {
-            const codes = { 1: 'Abort', 2: 'Network', 3: 'Decode', 4: 'Not Found' };
-            const errorType = codes[player.error?.code] || 'Unknown';
-            log(`CRITICAL: ${errorType} - Check file exists at root.`);
+            log(`CRITICAL: Error Code ${player.error?.code || 'Unknown'}`);
             if (currentBtn) {
                 currentBtn.closest('.track-item').classList.add('is-error');
                 currentBtn.closest('.track-item').classList.remove('is-playing');
@@ -357,24 +343,18 @@
 
         player.ontimeupdate = () => {
             if (!currentBtn || isNaN(player.duration)) return;
-            
             const trackItem = currentBtn.closest('.track-item');
             const progressFill = trackItem.querySelector('.audio-progress-fill');
             const timeDisplay = trackItem.querySelector('.time-display');
-            
             const percent = (player.currentTime / player.duration) * 100;
             progressFill.style.width = `${percent}%`;
-            
             const mins = Math.floor(player.currentTime / 60);
             const secs = Math.floor(player.currentTime % 60).toString().padStart(2, '0');
             timeDisplay.innerText = `${mins}:${secs}`;
         };
 
         player.onended = () => {
-            if (currentBtn) {
-                currentBtn.closest('.track-item').classList.remove('is-playing');
-                currentBtn.querySelector('.audio-progress-fill').style.width = '0%';
-            }
+            if (currentBtn) currentBtn.closest('.track-item').classList.remove('is-playing');
             currentBtn = null;
         };
 
