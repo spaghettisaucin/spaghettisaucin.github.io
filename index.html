@@ -184,7 +184,7 @@
                         <button onclick="filterTracks('deephouse')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">02_Deep_House</button>
                         <button onclick="filterTracks('garage')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">03_Garage_House</button>
                         <button onclick="filterTracks('riddim')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">04_Riddim</button>
-                        <button onclick="filterTracks('hiphop')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">05_HipHop_Trap</button>
+                        <button onclick="filterTracks('hiphop')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em] transition-all">05_HipHop_Trap_Beats</button>
                     </div>
                 </aside>
 
@@ -201,8 +201,8 @@
                                     <div class="truncate">
                                         <h4 class="track-title text-sm font-bold mono tracking-widest uppercase truncate">reverse</h4>
                                         <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter">
-                                            <span class="text-red-400">#HipHop_Trap</span>
-                                            <span>N/A BPM</span>
+                                            <span class="text-red-400">#HipHop_Trap_Beats</span>
+                                            <span>165 BPM</span>
                                         </div>
                                     </div>
                                     <span class="time-display mono text-[10px] text-white/20 shrink-0">00:00</span>
@@ -227,7 +227,7 @@
                                         <h4 class="track-title text-sm font-bold mono tracking-widest uppercase truncate">dracula</h4>
                                         <div class="flex gap-3 mt-1 text-[8px] mono uppercase text-white/30 tracking-tighter">
                                             <span class="text-emerald-400">#DeepHouse</span>
-                                            <span>N/A BPM</span>
+                                            <span>120 BPM</span>
                                         </div>
                                     </div>
                                     <span class="time-display mono text-[10px] text-white/20 shrink-0">00:00</span>
@@ -540,7 +540,6 @@
                 sortTracksByDate();
                 document.querySelectorAll('.track-item').forEach(i => {
                     const cat = i.dataset.category;
-                    // Include the new category in newest
                     i.style.display = (cat === 'psytrance' || cat === 'deephouse' || cat === 'garage' || cat === 'hiphop') ? 'block' : 'none';
                 });
             } else {
@@ -561,7 +560,6 @@
                 const fileA = a.dataset.filename;
                 const fileB = b.dataset.filename;
                 
-                // Priority sort for specific newest files
                 if (fileA === 'reverse.mp3') return -1;
                 if (fileB === 'reverse.mp3') return 1;
                 if (fileA === 'dracula.mp3') return -1;
