@@ -191,26 +191,8 @@
 
     <audio id="global-player"></audio>
 
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Firebase Configuration
-        const firebaseConfig = JSON.parse(__firebase_config);
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'spaghettisaucin-portfolio';
-
-        // State
-        let user = null;
-        let currentBtn = null;
-        let lastVolume = 0.8;
-        const player = document.getElementById('global-player');
-        player.volume = 0.8;
-
+    <!-- UI & Audio Player Logic (Always runs safely) -->
+    <script>
         const TRACKS = [
             { id: 'kgaaaa', filename: 'kgaaaa.mp3', category: 'hiphop', color: 'text-red-400', label: '#HipHop_Trap' },
             { id: 'festive', filename: 'festive.mp3', category: 'misc', color: 'text-blue-400', label: '#Misc' },
@@ -230,7 +212,14 @@
 
         const SPOTLIGHT_ORDER = ['kgaaaa.mp3', 'festive.mp3', 'munch.mp3', '123.mp3', 'parttwo.mp3', 'psytranceeee.mp3', 'grahj.mp3', 'teet.mp3', 'smartfella.mp3', 'dracula.mp3', 'donk.mp3', 'boom_boom.mp3'];
 
-        // Initial UI Render
+        let currentBtn = null;
+        let lastVolume = 0.8;
+        const player = document.getElementById('global-player');
+        player.volume = 0.8;
+
+        // Stub out the log play feature. It will be seamlessly hooked by the Firebase module below
+        window.logPlay = function(trackId) {};
+
         function renderTracks() {
             const container = document.getElementById('track-container');
             container.innerHTML = '';
@@ -239,7 +228,7 @@
                     <div class="track-item border-b border-white/5 hover:bg-white/[0.02] py-8 px-4" 
                          data-category="${track.category}" data-filename="${track.filename}" data-id="${track.id}">
                         <div class="flex items-center gap-6">
-                            <button onclick="window.toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/${track.filename}')" 
+                            <button onclick="toggleTrack(this, 'https://raw.githubusercontent.com/spaghettisaucin/spaghettisaucin.github.io/main/${track.filename}')" 
                                     class="play-btn w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:text-black shrink-0">
                                 <i data-lucide="play" class="play-icon w-4 h-4 ml-0.5"></i>
                                 <i data-lucide="pause" class="pause-icon w-4 h-4"></i>
@@ -260,7 +249,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div class="audio-progress w-full mt-4" onclick="window.seek(event, this)">
+                                <div class="audio-progress w-full mt-4" onclick="seek(event, this)">
                                     <div class="audio-progress-fill"></div>
                                 </div>
                             </div>
@@ -270,60 +259,10 @@
                 container.insertAdjacentHTML('beforeend', html);
             });
             lucide.createIcons();
-            window.filterTracks('all');
+            filterTracks('all');
         }
 
-        // Play Tracking Logic
-        async function incrementPlayCount(trackId) {
-            if (!user) return;
-            try {
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'track_stats', trackId);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    await updateDoc(docRef, { plays: increment(1) });
-                } else {
-                    await setDoc(docRef, { plays: 1 });
-                }
-            } catch (e) {
-                console.error("Error logging play:", e);
-            }
-        }
-
-        // Sync Stats
-        function setupStatsListener() {
-            if (!user) return;
-            const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'track_stats');
-            onSnapshot(collectionRef, (snapshot) => {
-                snapshot.forEach(doc => {
-                    const trackId = doc.id;
-                    const data = doc.data();
-                    const trackEl = document.querySelector(`.track-item[data-id="${trackId}"]`);
-                    if (trackEl) {
-                        const display = trackEl.querySelector('.play-count-display');
-                        display.innerText = `Streams: ${data.plays || 0}`;
-                    }
-                });
-            }, (err) => console.error("Stats listener error:", err));
-        }
-
-        // Initialize App
-        const initAuth = async () => {
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                await signInWithCustomToken(auth, __initial_auth_token);
-            } else {
-                await signInAnonymously(auth);
-            }
-        };
-
-        onAuthStateChanged(auth, (u) => {
-            user = u;
-            if (user) {
-                setupStatsListener();
-            }
-        });
-
-        // Global functions for HTML access
-        window.toggleTrack = async (btn, file) => {
+        function toggleTrack(btn, file) {
             const trackItem = btn.closest('.track-item');
             const trackId = trackItem.dataset.id;
 
@@ -344,16 +283,16 @@
             player.play();
             trackItem.classList.add('is-playing');
             
-            // Log play count
-            await incrementPlayCount(trackId);
-        };
+            // Notify background systems that a track was played!
+            window.logPlay(trackId);
+        }
 
-        window.seek = (event, el) => {
+        function seek(event, el) {
             if (!currentBtn || isNaN(player.duration)) return;
             player.currentTime = ((event.clientX - el.getBoundingClientRect().left) / el.offsetWidth) * player.duration;
-        };
+        }
 
-        window.filterTracks = (category) => {
+        function filterTracks(category) {
             document.querySelectorAll('.filter-btn').forEach(b => {
                 b.classList.toggle('active', b.getAttribute('onclick').includes(`'${category}'`));
             });
@@ -371,6 +310,11 @@
                     if (idxB !== -1) return 1;
                     return 0;
                 });
+            } else {
+                for (let i = tracks.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
+                }
             }
 
             tracks.forEach(track => {
@@ -378,32 +322,30 @@
                 const match = isSpotlight || track.dataset.category === category;
                 track.style.display = match ? 'block' : 'none';
             });
-        };
+        }
 
-        window.showPage = (pageId) => {
+        function showPage(pageId) {
             window.scrollTo(0, 0);
             document.querySelectorAll('.page-transition').forEach(p => {
                 p.classList.toggle('active-page', p.id === `page-${pageId}`);
                 p.classList.toggle('hidden-page', p.id !== `page-${pageId}`);
             });
-            if(pageId === 'audio') window.filterTracks('all');
-        };
+            if(pageId === 'audio') filterTracks('all');
+        }
 
-        window.updateVolume = (val) => { player.volume = val; lastVolume = val; window.updateVolumeIcon(val); };
-        
-        window.toggleMute = () => {
+        function updateVolume(val) { player.volume = val; lastVolume = val; updateVolumeIcon(val); }
+        function toggleMute() {
             if (player.volume > 0) { lastVolume = player.volume; player.volume = 0; document.getElementById('master-volume').value = 0; } 
             else { player.volume = lastVolume || 0.8; document.getElementById('master-volume').value = player.volume; }
-            window.updateVolumeIcon(player.volume);
-        };
-
-        window.updateVolumeIcon = (val) => {
+            updateVolumeIcon(player.volume);
+        }
+        function updateVolumeIcon(val) {
             const icon = document.querySelector('#mute-btn i');
             if (val == 0) icon.setAttribute('data-lucide', 'volume-x');
             else if (val < 0.5) icon.setAttribute('data-lucide', 'volume-1');
             else icon.setAttribute('data-lucide', 'volume-2');
             lucide.createIcons();
-        };
+        }
 
         player.ontimeupdate = () => {
             if (!currentBtn || isNaN(player.duration)) return;
@@ -426,10 +368,80 @@
             }
         };
 
-        // Final Boot
-        renderTracks();
-        initAuth();
+        // Render UI immediately
+        window.onload = () => {
+            lucide.createIcons();
+            renderTracks();
+        }
+    </script>
 
+    <!-- Cloud Storage Analytics Logic (Runs seamlessly in background) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        try {
+            if (typeof __firebase_config !== 'undefined') {
+                const firebaseConfig = JSON.parse(__firebase_config);
+                const app = initializeApp(firebaseConfig);
+                const auth = getAuth(app);
+                const db = getFirestore(app);
+                const appId = typeof __app_id !== 'undefined' ? __app_id : 'spaghettisaucin-portfolio';
+                let user = null;
+
+                // Hijack the empty local logPlay function and connect it to the cloud
+                window.logPlay = async function(trackId) {
+                    if (!user) return;
+                    try {
+                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'track_stats', trackId);
+                        const docSnap = await getDoc(docRef);
+                        if (docSnap.exists()) {
+                            await updateDoc(docRef, { plays: increment(1) });
+                        } else {
+                            await setDoc(docRef, { plays: 1 });
+                        }
+                    } catch (e) {
+                        console.error("Error logging play:", e);
+                    }
+                };
+
+                const setupStatsListener = () => {
+                    if (!user) return;
+                    const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'track_stats');
+                    onSnapshot(collectionRef, (snapshot) => {
+                        snapshot.forEach(docSnap => {
+                            const trackId = docSnap.id;
+                            const data = docSnap.data();
+                            const trackEl = document.querySelector(`.track-item[data-id="${trackId}"]`);
+                            if (trackEl) {
+                                const display = trackEl.querySelector('.play-count-display');
+                                if (display) display.innerText = `Streams: ${data.plays || 0}`;
+                            }
+                        });
+                    }, (err) => console.error("Stats listener error:", err));
+                };
+
+                const initAuth = async () => {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                };
+
+                onAuthStateChanged(auth, (u) => {
+                    user = u;
+                    if (user) {
+                        setupStatsListener();
+                    }
+                });
+
+                initAuth();
+            }
+        } catch (error) {
+            console.warn("Analytics module bypassed.");
+        }
     </script>
 </body>
 </html>
