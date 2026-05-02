@@ -67,8 +67,9 @@
 
         @media (min-width: 768px) { .hero-image-nav { width: 64px; height: 64px; } }
 
+        /* Global playing state styles */
         .is-playing .play-icon { display: none; }
-        .is-playing .pause-icon { display: block; }
+        .is-playing .pause-icon { display: block !important; }
         .pause-icon { display: none; }
 
         input[type=range] { -webkit-appearance: none; background: transparent; }
@@ -98,7 +99,15 @@
             </div>
 
             <div class="flex items-center justify-between md:justify-end gap-4 md:gap-10 w-full md:w-auto">
-                <div class="flex items-center gap-3 bg-white/5 px-3 py-2 rounded-full border border-white/10">
+                <div class="flex items-center gap-3 md:gap-4 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+                    <!-- Universal Play/Pause -->
+                    <button onclick="toggleGlobalPlayback()" id="global-play-pause" class="text-white/60 hover:text-white transition-colors">
+                        <i data-lucide="play" class="play-icon w-3.5 h-3.5 md:w-4 md:h-4"></i>
+                        <i data-lucide="pause" class="pause-icon w-3.5 h-3.5 md:w-4 md:h-4"></i>
+                    </button>
+                    
+                    <div class="h-4 w-px bg-white/10"></div>
+
                     <button onclick="toggleMute()" id="mute-btn" class="text-white/40 hover:text-white transition-colors">
                         <i data-lucide="volume-2" class="w-3.5 h-3.5 md:w-4 md:h-4"></i>
                     </button>
@@ -248,6 +257,7 @@
         let currentBtn = null;
         let lastVolume = 0.8;
         const player = document.getElementById('global-player');
+        const globalPlayPause = document.getElementById('global-play-pause');
         player.volume = 0.8;
 
         function renderTracks() {
@@ -289,7 +299,7 @@
                 container.insertAdjacentHTML('beforeend', html);
             });
             lucide.createIcons();
-            // Default filter (optional, just to render initial state)
+            // Default filter
             filterTracks('psytrance');
         }
 
@@ -298,10 +308,8 @@
             if (currentBtn === btn) {
                 if (player.paused) { 
                     player.play(); 
-                    trackItem.classList.add('is-playing');
                 } else { 
                     player.pause(); 
-                    trackItem.classList.remove('is-playing');
                 }
                 return;
             }
@@ -310,6 +318,15 @@
             player.src = file;
             player.play();
             trackItem.classList.add('is-playing');
+        }
+
+        function toggleGlobalPlayback() {
+            if (!player.src) return;
+            if (player.paused) {
+                player.play();
+            } else {
+                player.pause();
+            }
         }
 
         function seek(event, el) {
@@ -324,7 +341,7 @@
             const container = document.getElementById('track-container');
             const tracks = Array.from(container.getElementsByClassName('track-item'));
             
-            // Randomize order for fresh discovery
+            // Randomize order
             for (let i = tracks.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
@@ -340,22 +357,17 @@
         function openArchive(mode) {
             showPage('audio');
             
-            const energySidebar = document.getElementById('sidebar-energy');
-            const chillSidebar = document.getElementById('sidebar-chill');
-            const hiphopSidebar = document.getElementById('sidebar-hiphop');
-            
-            energySidebar.style.display = 'none';
-            chillSidebar.style.display = 'none';
-            hiphopSidebar.style.display = 'none';
+            const sidebarIds = ['sidebar-energy', 'sidebar-chill', 'sidebar-hiphop'];
+            sidebarIds.forEach(id => document.getElementById(id).style.display = 'none');
             
             if (mode === 'energy') {
-                energySidebar.style.display = 'flex';
+                document.getElementById('sidebar-energy').style.display = 'flex';
                 filterTracks('psytrance');
             } else if (mode === 'chill') {
-                chillSidebar.style.display = 'flex';
+                document.getElementById('sidebar-chill').style.display = 'flex';
                 filterTracks('deephouse');
             } else if (mode === 'hiphop') {
-                hiphopSidebar.style.display = 'flex';
+                document.getElementById('sidebar-hiphop').style.display = 'flex';
                 filterTracks('hiphop');
             }
         }
@@ -369,11 +381,19 @@
         }
 
         function updateVolume(val) { player.volume = val; lastVolume = val; updateVolumeIcon(val); }
+        
         function toggleMute() {
-            if (player.volume > 0) { lastVolume = player.volume; player.volume = 0; document.getElementById('master-volume').value = 0; } 
-            else { player.volume = lastVolume || 0.8; document.getElementById('master-volume').value = player.volume; }
+            if (player.volume > 0) { 
+                lastVolume = player.volume; 
+                player.volume = 0; 
+                document.getElementById('master-volume').value = 0; 
+            } else { 
+                player.volume = lastVolume || 0.8; 
+                document.getElementById('master-volume').value = player.volume; 
+            }
             updateVolumeIcon(player.volume);
         }
+
         function updateVolumeIcon(val) {
             const icon = document.querySelector('#mute-btn i');
             if (val == 0) icon.setAttribute('data-lucide', 'volume-x');
@@ -381,6 +401,17 @@
             else icon.setAttribute('data-lucide', 'volume-2');
             lucide.createIcons();
         }
+
+        // Handle global play/pause state synchronization
+        player.onplay = () => {
+            globalPlayPause.classList.add('is-playing');
+            if (currentBtn) currentBtn.closest('.track-item').classList.add('is-playing');
+        };
+
+        player.onpause = () => {
+            globalPlayPause.classList.remove('is-playing');
+            if (currentBtn) currentBtn.closest('.track-item').classList.remove('is-playing');
+        };
 
         player.ontimeupdate = () => {
             if (!currentBtn || isNaN(player.duration)) return;
