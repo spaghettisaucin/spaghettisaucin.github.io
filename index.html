@@ -209,6 +209,7 @@
             { id: 'munch_orig', filename: 'munch.mp3', category: 'misc', color: 'text-blue-400', label: '#Misc', purchaseUrl: PAYPAL_LINK },
             { id: 'boom_boom', filename: 'boom_boom.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
             { id: 'dracula', filename: 'dracula.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
+            { id: 'mrc_house', filename: 'mrc.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
             { id: 'donk', filename: 'donk.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse', purchaseUrl: PAYPAL_LINK },
             { id: 'lasah', filename: 'lasah.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse', purchaseUrl: PAYPAL_LINK },
             { id: 'dracula_orig', filename: 'dracula.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
@@ -242,7 +243,7 @@
                             <div class="flex-grow min-w-0">
                                 <div class="flex justify-between items-start">
                                     <div>
-                                        <h4 class="text-sm font-bold mono tracking-widest uppercase truncate">${track.id.replace('_orig', '')}</h4>
+                                        <h4 class="text-sm font-bold mono tracking-widest uppercase truncate">${track.id.replace('_orig', '').replace('_house', '')}</h4>
                                         <div class="flex gap-4 mt-1 text-[8px] mono uppercase text-white/30">
                                             <span class="${track.color}">${track.label}</span>
                                         </div>
