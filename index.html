@@ -164,14 +164,19 @@
 
                 <h2 class="text-2xl md:text-3xl font-bold mono italic tracking-tighter uppercase leading-none mb-8">Select_Archive.</h2>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-4xl">
                     <button onclick="openArchive('hiphop')" class="group flex flex-col justify-center items-center text-center border border-white/10 p-4 md:p-6 hover:bg-white hover:text-black transition-all duration-500 min-h-[100px] md:min-h-[120px]">
                         <span class="mono text-sm md:text-base font-bold tracking-[0.2em] uppercase mb-2">HipHop Beats</span>
                         <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-2 transition-transform"></i>
                     </button>
+
+                    <button onclick="openArchive('chill')" class="group flex flex-col justify-center items-center text-center border border-white/10 p-4 md:p-6 hover:bg-white hover:text-black transition-all duration-500 min-h-[100px] md:min-h-[120px]">
+                        <span class="mono text-sm md:text-base font-bold tracking-[0.2em] uppercase mb-2">Chill</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-2 transition-transform"></i>
+                    </button>
                     
-                    <button onclick="openArchive('edm')" class="group flex flex-col justify-center items-center text-center border border-white/10 p-4 md:p-6 hover:bg-white hover:text-black transition-all duration-500 min-h-[100px] md:min-h-[120px]">
-                        <span class="mono text-sm md:text-base font-bold tracking-[0.2em] uppercase mb-2">EDM</span>
+                    <button onclick="openArchive('energy')" class="group flex flex-col justify-center items-center text-center border border-white/10 p-4 md:p-6 hover:bg-white hover:text-black transition-all duration-500 min-h-[100px] md:min-h-[120px]">
+                        <span class="mono text-sm md:text-base font-bold tracking-[0.2em] uppercase mb-2">Energy</span>
                         <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-2 transition-transform"></i>
                     </button>
                 </div>
@@ -189,10 +194,13 @@
 
                     <h2 class="text-4xl font-bold mono italic tracking-tighter uppercase leading-none mb-6">Archive.</h2>
                     
-                    <div id="sidebar-edm" class="flex flex-col gap-2">
+                    <div id="sidebar-energy" class="flex flex-col gap-2" style="display: none;">
                         <button onclick="filterTracks('psytrance')" class="filter-btn active text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">01_Psytrance</button>
-                        <button onclick="filterTracks('deephouse')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">02_Deep_House</button>
-                        <button onclick="filterTracks('garage')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">03_Garage_House</button>
+                        <button onclick="filterTracks('garage')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">02_Garage_House</button>
+                    </div>
+
+                    <div id="sidebar-chill" class="flex flex-col gap-2" style="display: none;">
+                        <button onclick="filterTracks('deephouse')" class="filter-btn active text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">01_Deep_House</button>
                     </div>
 
                     <div id="sidebar-hiphop" class="flex flex-col gap-2" style="display: none;">
@@ -221,7 +229,7 @@
 
         const TRACKS = [
             { id: 'grahj', filename: 'grahj.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse', purchaseUrl: PAYPAL_LINK },
-            { id: '123_garage', filename: '123.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse', purchaseUrl: PAYPAL_LINK },
+            { id: '123_garage', filename: '123.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
             { id: 'boom_boom', filename: 'boom_boom.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
             { id: 'dracula', filename: 'dracula.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
             { id: 'mrc_house', filename: 'mrc.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
@@ -281,6 +289,7 @@
                 container.insertAdjacentHTML('beforeend', html);
             });
             lucide.createIcons();
+            // Default filter (optional, just to render initial state)
             filterTracks('psytrance');
         }
 
@@ -331,15 +340,21 @@
         function openArchive(mode) {
             showPage('audio');
             
-            const edmSidebar = document.getElementById('sidebar-edm');
+            const energySidebar = document.getElementById('sidebar-energy');
+            const chillSidebar = document.getElementById('sidebar-chill');
             const hiphopSidebar = document.getElementById('sidebar-hiphop');
             
-            if (mode === 'edm') {
-                edmSidebar.style.display = 'flex';
-                hiphopSidebar.style.display = 'none';
+            energySidebar.style.display = 'none';
+            chillSidebar.style.display = 'none';
+            hiphopSidebar.style.display = 'none';
+            
+            if (mode === 'energy') {
+                energySidebar.style.display = 'flex';
                 filterTracks('psytrance');
+            } else if (mode === 'chill') {
+                chillSidebar.style.display = 'flex';
+                filterTracks('deephouse');
             } else if (mode === 'hiphop') {
-                edmSidebar.style.display = 'none';
                 hiphopSidebar.style.display = 'flex';
                 filterTracks('hiphop');
             }
