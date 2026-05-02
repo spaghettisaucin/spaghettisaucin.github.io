@@ -165,10 +165,9 @@
 
                     <h2 class="text-4xl font-bold mono italic tracking-tighter uppercase leading-none mb-6">Archive.</h2>
                     <div class="flex flex-col gap-2">
-                        <button onclick="filterTracks('spotlight')" class="filter-btn active text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">00_Spotlight</button>
-                        <button onclick="filterTracks('deephouse')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">01_Deep_House</button>
-                        <button onclick="filterTracks('garage')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">02_Garage_House</button>
-                        <button onclick="filterTracks('psytrance')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">03_Psytrance</button>
+                        <button onclick="filterTracks('psytrance')" class="filter-btn active text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">01_Psytrance</button>
+                        <button onclick="filterTracks('deephouse')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">02_Deep_House</button>
+                        <button onclick="filterTracks('garage')" class="filter-btn text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">03_Garage_House</button>
                     </div>
                 </aside>
 
@@ -192,9 +191,6 @@
         const PAYPAL_LINK = 'https://www.paypal.com/ncp/payment/GUT5AGMMRENUU';
 
         const TRACKS = [
-            { id: 'psytrance_spot', filename: 'psytranceeee.mp3', category: 'spotlight', color: 'text-yellow-400', label: '#Spotlight', purchaseUrl: PAYPAL_LINK },
-            { id: 'parttwo_spot', filename: 'parttwo.mp3', category: 'spotlight', color: 'text-yellow-400', label: '#Spotlight', purchaseUrl: PAYPAL_LINK },
-            
             { id: 'grahj', filename: 'grahj.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse', purchaseUrl: PAYPAL_LINK },
             { id: '123_garage', filename: '123.mp3', category: 'garage', color: 'text-pink-400', label: '#GarageHouse', purchaseUrl: PAYPAL_LINK },
             { id: 'boom_boom', filename: 'boom_boom.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
@@ -250,7 +246,7 @@
                 container.insertAdjacentHTML('beforeend', html);
             });
             lucide.createIcons();
-            filterTracks('spotlight');
+            filterTracks('psytrance');
         }
 
         function toggleTrack(btn, file) {
@@ -284,19 +280,10 @@
             const container = document.getElementById('track-container');
             const tracks = Array.from(container.getElementsByClassName('track-item'));
             
-            // Randomize order unless it's spotlight (to maintain the requested order)
-            if (category !== 'spotlight') {
-                for (let i = tracks.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
-                }
-            } else {
-                // Sort spotlight by current array order
-                tracks.sort((a, b) => {
-                    const idxA = TRACKS.findIndex(t => t.id === a.dataset.id);
-                    const idxB = TRACKS.findIndex(t => t.id === b.dataset.id);
-                    return idxA - idxB;
-                });
+            // Randomize order for fresh discovery
+            for (let i = tracks.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
             }
 
             tracks.forEach(track => {
@@ -312,7 +299,7 @@
                 p.classList.toggle('active-page', p.id === `page-${pageId}`);
                 p.classList.toggle('hidden-page', p.id !== `page-${pageId}`);
             });
-            if(pageId === 'audio') filterTracks('spotlight');
+            if(pageId === 'audio') filterTracks('psytrance');
         }
 
         function updateVolume(val) { player.volume = val; lastVolume = val; updateVolumeIcon(val); }
