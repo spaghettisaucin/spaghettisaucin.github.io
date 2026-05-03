@@ -172,7 +172,7 @@
                         <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-2 transition-transform"></i>
                     </button>
                     <button onclick="openArchive('chill')" class="group flex flex-col justify-center items-center text-center border border-white/10 p-4 md:p-6 hover:bg-white hover:text-black transition-all duration-500 min-h-[100px] md:min-h-[120px]">
-                        <span class="mono text-sm md:text-base font-bold tracking-[0.2em] uppercase mb-2">House Music EP. 1 'BNB'</span>
+                        <span class="mono text-sm md:text-base font-bold tracking-[0.2em] uppercase mb-2">House Music</span>
                         <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-2 transition-transform"></i>
                     </button>
                     <button onclick="openArchive('energy')" class="group flex flex-col justify-center items-center text-center border border-white/10 p-4 md:p-6 hover:bg-white hover:text-black transition-all duration-500 min-h-[100px] md:min-h-[120px]">
@@ -198,7 +198,7 @@
                     </div>
                     
                     <div id="sidebar-chill" class="flex flex-col gap-2" style="display: none;">
-                        <button onclick="filterTracks('deephouse')" class="filter-btn active text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">01_Deep_House</button>
+                        <button onclick="filterTracks('deephouse')" class="filter-btn active text-left px-5 py-3 border border-white/10 mono text-[9px] uppercase tracking-[0.3em]">01_House_Music</button>
                     </div>
                     
                     <div id="sidebar-hiphop" class="flex flex-col gap-2" style="display: none;">
@@ -237,16 +237,16 @@
             'rias.mp3', 'traplord.mp3', 'costarica.mp3', 'blind.mp3'
         ];
 
-        // Core track list ordered as per "House Music EP. 1 'BNB'" request
+        // Core track list ordered for House Music (Deep House)
         let TRACKS = [
-            // Deep House / House Music EP. 1 'BNB' (Ordered)
-            { id: '123', filename: '123.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
-            { id: 'boom_boom', filename: 'boom_boom.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
-            { id: 'mrc', filename: 'mrc.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
-            { id: 'teet', filename: 'teet.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
-            { id: 'grahj', filename: 'grahj.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
-            { id: 'dracula', filename: 'dracula.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
-            { id: 'buffet', filename: 'buffet.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#DeepHouse', purchaseUrl: PAYPAL_LINK },
+            // House Music (Ordered)
+            { id: '123', filename: '123.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#HouseMusic', purchaseUrl: PAYPAL_LINK },
+            { id: 'boom_boom', filename: 'boom_boom.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#HouseMusic', purchaseUrl: PAYPAL_LINK },
+            { id: 'mrc', filename: 'mrc.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#HouseMusic', purchaseUrl: PAYPAL_LINK },
+            { id: 'teet', filename: 'teet.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#HouseMusic', purchaseUrl: PAYPAL_LINK },
+            { id: 'grahj', filename: 'grahj.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#HouseMusic', purchaseUrl: PAYPAL_LINK },
+            { id: 'dracula', filename: 'dracula.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#HouseMusic', purchaseUrl: PAYPAL_LINK },
+            { id: 'buffet', filename: 'buffet.mp3', category: 'deephouse', color: 'text-emerald-400', label: '#HouseMusic', purchaseUrl: PAYPAL_LINK },
             
             // Psytrance
             { id: 'psytranceeee', filename: 'psytranceeee.mp3', category: 'psytrance', color: 'text-indigo-400', label: '#Psytrance', purchaseUrl: PAYPAL_LINK },
@@ -320,7 +320,6 @@
                 container.insertAdjacentHTML('beforeend', html);
             });
             lucide.createIcons();
-            // Default filter to psytrance (or whatever you prefer to show first)
             filterTracks('psytrance');
         }
 
