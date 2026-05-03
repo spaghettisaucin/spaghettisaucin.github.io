@@ -224,9 +224,9 @@
     <script>
         const PAYPAL_LINK = 'https://www.paypal.com/ncp/payment/GUT5AGMMRENUU';
 
-        // Efficient list of all hiphop track filenames
+        // Updated hiphop track list (zplomadeit.mp3 removed)
         const HIPHOP_FILENAMES = [
-            'ara.mp3', 'basicshizz.mp3', 'bodyody.mp3', 'check.mp3', 
+            'basicshizz.mp3', 'bodyody.mp3', 'check.mp3', 
             'chugga.mp3', 'control.mp3', 'different.mp3', 
             'dingding.mp3', 'diss.mp3', 'drillstrem.mp3', 'fellforyou.mp3', 
             'flint.mp3', 'idonefeelit.mp3', 'jeans.mp3', 'justforthis.mp3', 
@@ -235,7 +235,7 @@
             'shim.mp3', 'stirfy.mp3', 'stress.mp3', 'sundown.mp3', 
             'surrender.mp3', 'thisisnotadrill.mp3', 'throwawy.mp3', 'topic.mp3', 
             'trappininkentucky.mp3', 'trytokeepup.mp3', 'viewisdifferent.mp3', 'warrior.mp3', 
-            'zplomadeit.mp3', 'wlk.mp3', 'mtr.mp3', 'munch.mp3', 'stimming.mp3', 'sciatic.mp3',
+            'wlk.mp3', 'mtr.mp3', 'munch.mp3', 'stimming.mp3', 'sciatic.mp3',
             'rias.mp3', 'traplord.mp3', 'costarica.mp3', 'blind.mp3'
         ];
 
@@ -252,7 +252,6 @@
             { id: 'parttwo', filename: 'parttwo.mp3', category: 'psytrance', color: 'text-indigo-400', label: '#Psytrance', purchaseUrl: PAYPAL_LINK },
         ];
 
-        // Shuffle helper function
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -261,10 +260,8 @@
             return array;
         }
 
-        // Randomize the filenames list
         const shuffledHiphop = shuffleArray([...HIPHOP_FILENAMES]);
 
-        // Populate hiphop tracks with the shuffled list
         shuffledHiphop.forEach(file => {
             const id = file.replace('.mp3', '');
             TRACKS.push({
@@ -322,7 +319,6 @@
                 container.insertAdjacentHTML('beforeend', html);
             });
             lucide.createIcons();
-            // Start on Psytrance by default
             filterTracks('psytrance');
         }
 
